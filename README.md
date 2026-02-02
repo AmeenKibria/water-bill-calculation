@@ -1,5 +1,7 @@
 # Water Bill Split
 
+**Live App:** [https://vesihirv.streamlit.app](https://vesihirv.streamlit.app)
+
 Small Streamlit app to split a shared water bill:
 - Basic fees are split equally.
 - Usage fees are split based on sub-meter consumption.
