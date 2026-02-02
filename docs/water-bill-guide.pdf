@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 3432 >>
+<< /Length 3805 >>
 stream
 BT
 /F1 9 Tf
@@ -135,17 +135,27 @@ BT
 0 -11 Td
 (When to take sub-meter readings \(2026\)) Tj
 0 -11 Td
-(    01/01/2026 \(start\) and 31/03/2026 \(end\)) Tj
+(  Go to the maintenance room on these dates:) Tj
 0 -11 Td
-(    01/04/2026 \(start\) and 30/06/2026 \(end\)) Tj
+(    31/03/2026 ? End of Q1, Start of Q2) Tj
 0 -11 Td
-(    01/07/2026 \(start\) and 30/09/2026 \(end\)) Tj
+(    30/06/2026 ? End of Q2, Start of Q3) Tj
 0 -11 Td
-(    01/10/2026 \(start\) and 31/12/2026 \(end\)) Tj
+(    30/09/2026 ? End of Q3, Start of Q4) Tj
 0 -11 Td
-(  - If needed, end readings can be taken the next morning.) Tj
+(    31/12/2026 ? End of Q4, Start of Q1 2027) Tj
+0 -11 Td
+(  - One reading serves as both the END of one period and the START of the next.) Tj
+0 -11 Td
+(  - Best times: Late evening \(21:00-23:59\) on the last day,) Tj
+0 -11 Td
+(    OR early morning \(06:00-08:00\) on the first day of the new period.) Tj
+0 -11 Td
+(  - Overnight water usage is minimal, so either time works.) Tj
 0 -11 Td
 (  - Ameen also will go on these dates to the maintenance room to take the readings.) Tj
+0 -11 Td
+(  - Both should take readings at the same time for accurate billing.) Tj
 0 -11 Td
 ET
 endstream
@@ -160,9 +170,9 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000241 00000 n 
-0000003725 00000 n 
+0000004098 00000 n 
 trailer
 << /Size 6 /Root 1 0 R >>
 startxref
-3795
+4168
 %%EOF

@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 3441 >>
+<< /Length 3809 >>
 stream
 BT
 /F1 9 Tf
@@ -135,19 +135,27 @@ BT
 0 -11 Td
 (Milloin alamittarin lukemat otetaan \(2026\)) Tj
 0 -11 Td
-(    01/01/2026 \(alku\) ja 31/03/2026 \(loppu\)) Tj
+(  Mene huoltotilaan nailla paivilla:) Tj
 0 -11 Td
-(    01/04/2026 \(alku\) ja 30/06/2026 \(loppu\)) Tj
+(    31/03/2026 ? Q1 loppu, Q2 alku) Tj
 0 -11 Td
-(    01/07/2026 \(alku\) ja 30/09/2026 \(loppu\)) Tj
+(    30/06/2026 ? Q2 loppu, Q3 alku) Tj
 0 -11 Td
-(    01/10/2026 \(alku\) ja 31/12/2026 \(loppu\)) Tj
+(    30/09/2026 ? Q3 loppu, Q4 alku) Tj
 0 -11 Td
-(  - Tarvittaessa loppulukema voidaan ottaa seuraavana aamuna.) Tj
+(    31/12/2026 ? Q4 loppu, Q1 2027 alku) Tj
 0 -11 Td
-(  - Ameen menee myös nailla paivilla huoltotilaan ottamaan lukemat.) Tj
+(  - Yksi lukema toimii seka edellisen jakson loppuna etta seuraavan alkuna.) Tj
 0 -11 Td
-() Tj
+(  - Parhaat ajat: Myohaan illalla \(22:00-23:59\) viimeisena paivana,) Tj
+0 -11 Td
+(    TAI aikaisin aamulla \(06:00-08:00\) uuden jakson ensimmaisena paivana.) Tj
+0 -11 Td
+(  - Yonaikainen vedenkulutus on minimaalista, joten kumpi tahansa aika sopii.) Tj
+0 -11 Td
+(  - Ameen menee myos nailla paivilla huoltotilaan ottamaan lukemat.) Tj
+0 -11 Td
+(  - Molempien tulisi ottaa lukemat samaan aikaan tarkan laskutuksen varmistamiseksi.) Tj
 0 -11 Td
 ET
 endstream
@@ -162,9 +170,9 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000241 00000 n 
-0000003734 00000 n 
+0000004102 00000 n 
 trailer
 << /Size 6 /Root 1 0 R >>
 startxref
-3804
+4172
 %%EOF

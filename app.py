@@ -2,7 +2,7 @@ import csv
 import io
 import json
 import os
-from datetime import datetime
+from datetime import datetime, time
 from pathlib import Path
 
 import gspread
@@ -99,6 +99,8 @@ def local_periods_records() -> list[dict]:
             {
                 "Period start": format_date(entry.get("period_start")),
                 "Period end": format_date(entry.get("period_end")),
+                "Reading start": entry.get("reading_start"),
+                "Reading end": entry.get("reading_end"),
                 "AS-1 usage": entry.get("s1_use"),
                 "AS-2 usage": entry.get("s2_use"),
                 "AS-1 adjusted": entry.get("adj_s1_use"),
@@ -263,6 +265,12 @@ if page_id == "split":
     usage_fees = parse_number(usage_fees_text)
 
     st.subheader(tr("Sub-meter usage (m³)", "Alamittarien kulutus (m³)"))
+    st.caption(
+        tr(
+            "Optional: record when the start/end readings were taken.",
+            "Valinnainen: merkitse milloin alku- ja loppulukemat otettiin.",
+        )
+    )
     usage_mode = st.radio(
         tr("Input method", "Syottotapa"),
         [tr("Readings (start/end)", "Lukemat (alku/loppu)"), tr("Usage only", "Vain kulutus")],
@@ -274,21 +282,85 @@ if page_id == "split":
             "Lukemat = alku ja loppu. Vain kulutus = kokonaiskulutus.",
         )
     )
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown("**AS-1 (Ameen)**")
+    s1_start_text = None
+    s1_end_text = None
+    s1_use_text = None
+    s2_start_text = None
+    s2_end_text = None
+    s2_use_text = None
+
+    row1_cols = st.columns([0.9, 0.6, 1.2, 1.2])
+    with row1_cols[0]:
+        reading_start_date = st.date_input(
+            tr("Reading start", "Lukema alku"),
+            format="DD/MM/YYYY",
+            key="reading_start_date",
+        )
+    with row1_cols[1]:
+        reading_start_time = st.time_input(
+            tr("Time", "Aika"),
+            value=time(0, 0),
+            key="reading_start_time",
+        )
+    with row1_cols[2]:
         if usage_mode == tr("Readings (start/end)", "Lukemat (alku/loppu)"):
             s1_start_text = st.text_input(
-                tr("AS-1 start", "AS-1 alku"),
+                tr("AS-1 start (Ameen)", "AS-1 alku (Ameen)"),
                 placeholder="0,000m3",
                 help=tr("Use comma as decimal. Max 3 decimals.", "Kayta pilkkua. Enintaan 3 desimaalia."),
+                key="s1_start_text",
             )
             if s1_start_text and not validate_decimal_places(s1_start_text, 3):
                 st.error(tr("AS-1 start: max 3 decimals.", "AS-1 alku: enintaan 3 desimaalia."))
-            s1_end_text = st.text_input(
-                tr("AS-1 end", "AS-1 loppu"),
+        else:
+            s1_use_text = st.text_input(
+                tr("AS-1 usage (Ameen)", "AS-1 kulutus (Ameen)"),
                 placeholder="0,000m3",
                 help=tr("Use comma as decimal. Max 3 decimals.", "Kayta pilkkua. Enintaan 3 desimaalia."),
+                key="s1_use_text",
+            )
+            if s1_use_text and not validate_decimal_places(s1_use_text, 3):
+                st.error(tr("AS-1 usage: max 3 decimals.", "AS-1 kulutus: enintaan 3 desimaalia."))
+    with row1_cols[3]:
+        if usage_mode == tr("Readings (start/end)", "Lukemat (alku/loppu)"):
+            s2_start_text = st.text_input(
+                tr("AS-2 start (Jussi)", "AS-2 alku (Jussi)"),
+                placeholder="0,000m3",
+                help=tr("Use comma as decimal. Max 3 decimals.", "Kayta pilkkua. Enintaan 3 desimaalia."),
+                key="s2_start_text",
+            )
+            if s2_start_text and not validate_decimal_places(s2_start_text, 3):
+                st.error(tr("AS-2 start: max 3 decimals.", "AS-2 alku: enintaan 3 desimaalia."))
+        else:
+            s2_use_text = st.text_input(
+                tr("AS-2 usage (Jussi)", "AS-2 kulutus (Jussi)"),
+                placeholder="0,000m3",
+                help=tr("Use comma as decimal. Max 3 decimals.", "Kayta pilkkua. Enintaan 3 desimaalia."),
+                key="s2_use_text",
+            )
+            if s2_use_text and not validate_decimal_places(s2_use_text, 3):
+                st.error(tr("AS-2 usage: max 3 decimals.", "AS-2 kulutus: enintaan 3 desimaalia."))
+
+    row2_cols = st.columns([0.9, 0.6, 1.2, 1.2])
+    with row2_cols[0]:
+        reading_end_date = st.date_input(
+            tr("Reading end", "Lukema loppu"),
+            format="DD/MM/YYYY",
+            key="reading_end_date",
+        )
+    with row2_cols[1]:
+        reading_end_time = st.time_input(
+            tr("Time", "Aika"),
+            value=time(0, 0),
+            key="reading_end_time",
+        )
+    with row2_cols[2]:
+        if usage_mode == tr("Readings (start/end)", "Lukemat (alku/loppu)"):
+            s1_end_text = st.text_input(
+                tr("AS-1 end (Ameen)", "AS-1 loppu (Ameen)"),
+                placeholder="0,000m3",
+                help=tr("Use comma as decimal. Max 3 decimals.", "Kayta pilkkua. Enintaan 3 desimaalia."),
+                key="s1_end_text",
             )
             if s1_end_text and not validate_decimal_places(s1_end_text, 3):
                 st.error(tr("AS-1 end: max 3 decimals.", "AS-1 loppu: enintaan 3 desimaalia."))
@@ -300,30 +372,16 @@ if page_id == "split":
                 else None
             )
         else:
-            s1_use_text = st.text_input(
-                tr("AS-1 usage", "AS-1 kulutus"),
-                placeholder="0,000m3",
-                help=tr("Use comma as decimal. Max 3 decimals.", "Kayta pilkkua. Enintaan 3 desimaalia."),
-            )
-            if s1_use_text and not validate_decimal_places(s1_use_text, 3):
-                st.error(tr("AS-1 usage: max 3 decimals.", "AS-1 kulutus: enintaan 3 desimaalia."))
             s1_use = parse_number(s1_use_text)
             s1_start = None
             s1_end = None
-    with col2:
-        st.markdown("**AS-2 (Jussi)**")
+    with row2_cols[3]:
         if usage_mode == tr("Readings (start/end)", "Lukemat (alku/loppu)"):
-            s2_start_text = st.text_input(
-                tr("AS-2 start", "AS-2 alku"),
-                placeholder="0,000m3",
-                help=tr("Use comma as decimal. Max 3 decimals.", "Kayta pilkkua. Enintaan 3 desimaalia."),
-            )
-            if s2_start_text and not validate_decimal_places(s2_start_text, 3):
-                st.error(tr("AS-2 start: max 3 decimals.", "AS-2 alku: enintaan 3 desimaalia."))
             s2_end_text = st.text_input(
-                tr("AS-2 end", "AS-2 loppu"),
+                tr("AS-2 end (Jussi)", "AS-2 loppu (Jussi)"),
                 placeholder="0,000m3",
                 help=tr("Use comma as decimal. Max 3 decimals.", "Kayta pilkkua. Enintaan 3 desimaalia."),
+                key="s2_end_text",
             )
             if s2_end_text and not validate_decimal_places(s2_end_text, 3):
                 st.error(tr("AS-2 end: max 3 decimals.", "AS-2 loppu: enintaan 3 desimaalia."))
@@ -335,13 +393,6 @@ if page_id == "split":
                 else None
             )
         else:
-            s2_use_text = st.text_input(
-                tr("AS-2 usage", "AS-2 kulutus"),
-                placeholder="0,000m3",
-                help=tr("Use comma as decimal. Max 3 decimals.", "Kayta pilkkua. Enintaan 3 desimaalia."),
-            )
-            if s2_use_text and not validate_decimal_places(s2_use_text, 3):
-                st.error(tr("AS-2 usage: max 3 decimals.", "AS-2 kulutus: enintaan 3 desimaalia."))
             s2_use = parse_number(s2_use_text)
             s2_start = None
             s2_end = None
@@ -395,10 +446,11 @@ if page_id == "split":
             errors.append(tr("AS-2 start must have at most 3 decimals.", "AS-2 alku enintaan 3 desimaalia."))
         if s2_end is not None and not validate_decimal_places(s2_end_text, 3):
             errors.append(tr("AS-2 end must have at most 3 decimals.", "AS-2 loppu enintaan 3 desimaalia."))
-        if s1_use is not None and not validate_decimal_places(s1_use_text, 3):
-            errors.append(tr("AS-1 usage must have at most 3 decimals.", "AS-1 kulutus enintaan 3 desimaalia."))
-        if s2_use is not None and not validate_decimal_places(s2_use_text, 3):
-            errors.append(tr("AS-2 usage must have at most 3 decimals.", "AS-2 kulutus enintaan 3 desimaalia."))
+        if usage_mode == tr("Usage only", "Vain kulutus"):
+            if s1_use_text is not None and not validate_decimal_places(s1_use_text, 3):
+                errors.append(tr("AS-1 usage must have at most 3 decimals.", "AS-1 kulutus enintaan 3 desimaalia."))
+            if s2_use_text is not None and not validate_decimal_places(s2_use_text, 3):
+                errors.append(tr("AS-2 usage must have at most 3 decimals.", "AS-2 kulutus enintaan 3 desimaalia."))
         if s1_use < 0 or s2_use < 0:
             errors.append(tr("Sub-meter usage cannot be negative.", "Alamittarin kulutus ei voi olla negatiivinen."))
         if use_main and main_start is not None and main_end is not None:
@@ -536,10 +588,15 @@ if page_id == "split":
             else:
                 st.info(tr("Mismatch not available (main meter not provided).", "Poikkeamaa ei voi laskea (paamittari puuttuu)."))
 
+            reading_start = f"{reading_start_date.strftime('%d/%m/%Y')} {reading_start_time.strftime('%H:%M')}"
+            reading_end = f"{reading_end_date.strftime('%d/%m/%Y')} {reading_end_time.strftime('%H:%M')}"
+
             if save_entry:
                 record = {
                     "Period start": period_start.strftime("%d/%m/%Y"),
                     "Period end": period_end.strftime("%d/%m/%Y"),
+                    "Reading start": reading_start,
+                    "Reading end": reading_end,
                     "AS-1 usage": s1_use,
                     "AS-2 usage": s2_use,
                     "AS-1 adjusted": adj_s1_use,
@@ -562,6 +619,8 @@ if page_id == "split":
                         {
                             "period_start": str(period_start),
                             "period_end": str(period_end),
+                            "reading_start": reading_start,
+                            "reading_end": reading_end,
                             "basic_fees": basic_fees,
                             "usage_fees": usage_fees,
                             "s1_start": s1_start,
@@ -647,6 +706,8 @@ elif page_id == "trueup":
         [tr("Use stored periods", "Kayta tallennettuja jaksoja"), tr("Manual usage", "Manuaalinen kulutus")],
         horizontal=True,
     )
+    s1_use_text = None
+    s2_use_text = None
     if usage_source == tr("Use stored periods", "Kayta tallennettuja jaksoja"):
         if not period_records:
             st.info(tr("No history entries found.", "Historiaa ei loydy."))
@@ -708,10 +769,11 @@ elif page_id == "trueup":
             errors.append(tr("AS-2 usage is required.", "AS-2 kulutus vaaditaan."))
         if trueup_amount_text and not validate_decimal_places(trueup_amount_text, 2):
             errors.append(tr("True-up amount must have at most 2 decimals.", "Oikaisun summa enintaan 2 desimaalia."))
-        if s1_use is not None and not validate_decimal_places(s1_use_text, 3):
-            errors.append(tr("AS-1 usage must have at most 3 decimals.", "AS-1 kulutus enintaan 3 desimaalia."))
-        if s2_use is not None and not validate_decimal_places(s2_use_text, 3):
-            errors.append(tr("AS-2 usage must have at most 3 decimals.", "AS-2 kulutus enintaan 3 desimaalia."))
+        if usage_source == tr("Manual usage", "Manuaalinen kulutus"):
+            if s1_use_text is not None and not validate_decimal_places(s1_use_text, 3):
+                errors.append(tr("AS-1 usage must have at most 3 decimals.", "AS-1 kulutus enintaan 3 desimaalia."))
+            if s2_use_text is not None and not validate_decimal_places(s2_use_text, 3):
+                errors.append(tr("AS-2 usage must have at most 3 decimals.", "AS-2 kulutus enintaan 3 desimaalia."))
         if errors:
             for err in errors:
                 st.error(err)
@@ -804,6 +866,8 @@ elif page_id == "history":
                     {
                         tr("Period start", "Jakson alku"): format_date(data["period_start"]),
                         tr("Period end", "Jakson loppu"): format_date(data["period_end"]),
+                        tr("Reading start", "Lukema alku"): data.get("reading_start"),
+                        tr("Reading end", "Lukema loppu"): data.get("reading_end"),
                         tr("AS-1 usage", "AS-1 kulutus"): format_m3(data["s1_use"]),
                         tr("AS-2 usage", "AS-2 kulutus"): format_m3(data["s2_use"]),
                         tr("AS-1 adjusted", "AS-1 sovitettu"): format_m3(data["adj_s1_use"]),
@@ -826,7 +890,7 @@ elif page_id == "history":
                         tr("Saved at", "Tallennettu"): format_date(data["saved_at"]),
                     }
                 )
-            st.dataframe(rows, use_container_width=True)
+            st.dataframe(rows, width="stretch")
             if rows:
                 csv_buffer = io.StringIO()
                 writer = csv.DictWriter(csv_buffer, fieldnames=rows[0].keys())
@@ -892,7 +956,7 @@ elif page_id == "history":
                     }
                 )
             if rows:
-                st.dataframe(rows, use_container_width=True)
+                st.dataframe(rows, width="stretch")
                 csv_buffer = io.StringIO()
                 writer = csv.DictWriter(csv_buffer, fieldnames=rows[0].keys())
                 writer.writeheader()

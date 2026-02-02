@@ -4,6 +4,8 @@ from utils import parse_number
 PERIODS_HEADERS = [
     "Period start",
     "Period end",
+    "Reading start",
+    "Reading end",
     "AS-1 usage",
     "AS-2 usage",
     "AS-1 adjusted",
@@ -37,6 +39,8 @@ def normalize_period_record(record: dict) -> dict:
     return {
         "period_start": record.get("Period start"),
         "period_end": record.get("Period end"),
+        "reading_start": record.get("Reading start"),
+        "reading_end": record.get("Reading end"),
         "s1_use": parse_number(record.get("AS-1 usage")) or 0.0,
         "s2_use": parse_number(record.get("AS-2 usage")) or 0.0,
         "adj_s1_use": parse_number(record.get("AS-1 adjusted")) or 0.0,
