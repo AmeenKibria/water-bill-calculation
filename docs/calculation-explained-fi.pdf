@@ -1,0 +1,279 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 5 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 7 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 2402 >>
+stream
+BT
+/F1 9 Tf
+/F1 12 Tf
+159.36 744 Td
+(Miten vesilaskun jako toimii - Hirvensarvi 16 B) Tj
+/F1 9 Tf
+-111.36 -16 Td
+() Tj
+0 -12 Td
+(Tama dokumentti selittaa miten vesimaksut jaetaan reilusti Ameenin \(AS-1\) ja Jussin \(AS-2\) kesken.) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(PERUSIDEA) Tj
+0 -12 Td
+(---------) Tj
+0 -12 Td
+(- Perusmaksut: Jaetaan 50/50, koska ne ovat kiinteita maksuja kiinteistolle) Tj
+0 -12 Td
+(- Kayttomaksut: Jaetaan alamittarien kulutuksen mukaan) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(MATEMATIIKKA \(esimerkilla\)) Tj
+0 -12 Td
+(--------------------------) Tj
+0 -12 Td
+(Oletetaan etta HSY-lasku nayttaa:) Tj
+0 -12 Td
+(  - Perusmaksut yhteensa: 84,00 EUR) Tj
+0 -12 Td
+(  - Kayttomaksut yhteensa: 222,00 EUR) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Ja alamittarit nayttavat:) Tj
+0 -12 Td
+(  - Ameen kaytti: 12 m3) Tj
+0 -12 Td
+(  - Jussi kaytti: 18 m3) Tj
+0 -12 Td
+(  - Alamittarit yhteensa: 30 m3) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Vaihe 1: Laske kummankin osuus kulutuksesta) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Ameenin osuus = 12 / 30 = 0,40 \(40%\)) Tj
+0 -12 Td
+(  Jussin osuus = 18 / 30 = 0,60 \(60%\)) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Vaihe 2: Sovella osuuksia kayttomaksuihin) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Ameenin kayttomaksu = 222,00 EUR x 0,40 = 88,80 EUR) Tj
+0 -12 Td
+(  Jussin kayttomaksu = 222,00 EUR x 0,60 = 133,20 EUR) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Vaihe 3: Jaa perusmaksut 50/50) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Ameenin perusmaksu = 84,00 EUR / 2 = 42,00 EUR) Tj
+0 -12 Td
+(  Jussin perusmaksu = 84,00 EUR / 2 = 42,00 EUR) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Vaihe 4: Laske yhteen) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Ameenin kokonaissumma = 42,00 + 88,80 = 130,80 EUR) Tj
+0 -12 Td
+(  Jussin kokonaissumma = 42,00 + 133,20 = 175,20 EUR) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Yhteensa = 130,80 + 175,20 = 306,00 EUR \(tasmaa laskuun!\)) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(KAAVAT) Tj
+0 -12 Td
+(------) Tj
+0 -12 Td
+(Jos haluat tarkat kaavat:) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  A = Ameenin vedenkulutus \(m3\)) Tj
+0 -12 Td
+(  J = Jussin vedenkulutus \(m3\)) Tj
+0 -12 Td
+(  B = Perusmaksut yhteensa \(EUR\)) Tj
+0 -12 Td
+(  T = Kayttomaksut yhteensa \(EUR\)) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Ameen maksaa = B/2 + T x \(A / \(A + J\)\)) Tj
+0 -12 Td
+(  Jussi maksaa = B/2 + T x \(J / \(A + J\)\)) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(MAKSUJARJESTELY) Tj
+0 -12 Td
+(---------------) Tj
+0 -12 Td
+(Koska Jussi maksaa HSY-laskun suoraan, jarjestely on yksinkertainen:) Tj
+0 -12 Td
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 6 0 R /Resources << /Font << /F1 7 0 R >> >> >>
+endobj
+6 0 obj
+<< /Length 2551 >>
+stream
+BT
+/F1 9 Tf
+48 744 Td
+(  - Ameen maksaa Jussille oman osuutensa) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Esimerkin tapauksessa: Ameen maksaa Jussille 130,80 EUR) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(MILLOIN PAAMITTARI OTETAAN HUOMIOON?) Tj
+0 -12 Td
+(------------------------------------) Tj
+0 -12 Td
+(Sovellus voi valinnaisesti kayttaa paamittarin lukemaa poikkeaman havaitsemiseen.) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Poikkeama \(D\) = Paamittari - \(Ameenin alamittari + Jussin alamittari\)) Tj
+0 -12 Td
+(  D = M - \(A + J\)) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Miksi poikkeamaa syntyy:) Tj
+0 -12 Td
+(  - Pienet mittauserot mittarien valilla) Tj
+0 -12 Td
+(  - Mittarinlukuajoitusten erot \(muutama tunti eroa\)) Tj
+0 -12 Td
+(  - Mittarien kalibrointierot) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(OLETUS: "Ohita poikkeama") Tj
+0 -12 Td
+(  Poikkeama naytetaan vain tiedoksi.) Tj
+0 -12 Td
+(  Kustannukset jaetaan alamittarien lukemien mukaan.) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(VAIHTOEHTO A: "Jaa poikkeama 50/50" \(jos molemmat sopivat\)) Tj
+0 -12 Td
+(  Kumpikin saa puolet poikkeamasta lisattyna kulutukseensa:) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Oikaistu Ameen = A + D/2) Tj
+0 -12 Td
+(  Oikaistu Jussi = J + D/2) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Kustannukset jaetaan oikaistujen arvojen mukaan.) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(VAIHTOEHTO B: "Jaa poikkeama suhteessa" \(jos molemmat sopivat\)) Tj
+0 -12 Td
+(  Poikkeama lisataan kulutussuhteen mukaan:) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Oikaistu Ameen = A + D x \(A / \(A + J\)\)) Tj
+0 -12 Td
+(  Oikaistu Jussi = J + D x \(J / \(A + J\)\)) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Kustannukset jaetaan oikaistujen arvojen mukaan.) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Esimerkki \(suhteellinen\):) Tj
+0 -12 Td
+(  Paamittari \(M\): 32 m3) Tj
+0 -12 Td
+(  Ameen \(A\): 12 m3, Jussi \(J\): 18 m3) Tj
+0 -12 Td
+(  Poikkeama \(D\): 32 - 30 = 2 m3) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Ameenin osuus = 12/30 = 0,40) Tj
+0 -12 Td
+(  Jussin osuus = 18/30 = 0,60) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Oikaistu Ameen = 12 + \(2 x 0,40\) = 12,8 m3) Tj
+0 -12 Td
+(  Oikaistu Jussi = 18 + \(2 x 0,60\) = 19,2 m3) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Kustannukset jaetaan arvoilla 12,8 ja 19,2 arvojen 12 ja 18 sijaan.) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(MIKSI TAMA ON REILU) Tj
+0 -12 Td
+(-------------------) Tj
+0 -12 Td
+(- Maksat siita mita kaytat) Tj
+0 -12 Td
+(- Perusmaksut jaetaan tasaisesti \(molemmat asunnot hyotyvat\)) Tj
+0 -12 Td
+(- Matematiikka on lapinakyva ja tarkistettavissa) Tj
+0 -12 Td
+(- Historia tallennetaan viitteeksi) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Kysyttavaa? Katso sovelluksesta tai kysy Ameenilta.) Tj
+0 -12 Td
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000247 00000 n 
+0000002701 00000 n 
+0000002827 00000 n 
+0000005430 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+5500
+%%EOF

@@ -3,176 +3,185 @@
 << /Type /Catalog /Pages 2 0 R >>
 endobj
 2 0 obj
-<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+<< /Type /Pages /Kids [3 0 R 5 0 R] /Count 2 >>
 endobj
 3 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 7 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 3809 >>
+<< /Length 3003 >>
 stream
 BT
 /F1 9 Tf
-48 744 Td
-ET
-BT
 /F1 12 Tf
 199.92 744 Td
 (Vesilaskun jako - Hirvensarvi 16 B) Tj
-ET
-BT
 /F1 9 Tf
-48 733 Td
+-151.92 -16 Td
 () Tj
-0 -11 Td
+0 -12 Td
 (Kun uusi HSY-lasku saapuu) Tj
-0 -11 Td
+0 -12 Td
 (1\) Merkitse laskutusjakson alku- ja loppupaiva.) Tj
-0 -11 Td
+0 -12 Td
 () Tj
-0 -11 Td
+0 -12 Td
 (2\) Merkitse kokonaissummat:) Tj
-0 -11 Td
+0 -12 Td
 (    - Perusmaksut yhteensa) Tj
-0 -11 Td
+0 -12 Td
 (    - Kayttomaksut yhteensa) Tj
-0 -11 Td
+0 -12 Td
 () Tj
-0 -11 Td
+0 -12 Td
 (3\) Lue alamittarit jakson alussa ja lopussa:) Tj
-0 -11 Td
+0 -12 Td
 (    - AS-1 \(Ameen\)) Tj
-0 -11 Td
+0 -12 Td
 (    - AS-2 \(Jussi\)) Tj
-0 -11 Td
+0 -12 Td
 (    - Mene huoltotilaan ja ota kuva molemmista mittareista.) Tj
-0 -11 Td
+0 -12 Td
 (    - Ota aloituslukema jakson ensimmaisena paivana.) Tj
-0 -11 Td
+0 -12 Td
 (    - Ota lopetuslukema viimeisena paivana \(ilta\) tai seuraavana aamuna.) Tj
-0 -11 Td
+0 -12 Td
 (    - Huom: Jussi menee huoltotilaan nailla paivilla ottamaan lukemat,) Tj
-0 -11 Td
+0 -12 Td
 (    ja Ameen tekee samoin.) Tj
-0 -11 Td
+0 -12 Td
 () Tj
-0 -11 Td
+0 -12 Td
 (4\) Sovelluksessa: Split current bill) Tj
-0 -11 Td
+0 -12 Td
 (    - Syota jakso, summat ja alamittarilukemat \(tai pelkka kulutus\).) Tj
-0 -11 Td
+0 -12 Td
 (    - Valinnaisesti: lisaa paamittarin lukemat, jotta nayet poikkeaman.) Tj
-0 -11 Td
+0 -12 Td
 (    - Paina Calculate split.) Tj
-0 -11 Td
+0 -12 Td
 () Tj
-0 -11 Td
+0 -12 Td
 (5\) Kayta Settlement-rivia ja WhatsApp-kopiointia.) Tj
-0 -11 Td
+0 -12 Td
 () Tj
-0 -11 Td
+0 -12 Td
 (6\) Pida "Save this period to history" valittuna.) Tj
-0 -11 Td
+0 -12 Td
 () Tj
-0 -11 Td
+0 -12 Td
 (Poikkeamapolitiikka \(mismatch\)) Tj
-0 -11 Td
+0 -12 Td
 (    - Oletus on vain naytto \(poikkeama ei vaikuta jakoon\).) Tj
-0 -11 Td
+0 -12 Td
 (    - Manuaalinen yliajo on saatavilla:) Tj
-0 -11 Td
+0 -12 Td
 (    - Jaa poikkeama 50/50) Tj
-0 -11 Td
+0 -12 Td
 (    - Jaa poikkeama suhteessa kulutukseen) Tj
-0 -11 Td
+0 -12 Td
 (    - Kayta yliajoa vain, jos molemmat sopivat.) Tj
-0 -11 Td
+0 -12 Td
 () Tj
-0 -11 Td
+0 -12 Td
 (Miksi tama asetus on olemassa) Tj
-0 -11 Td
+0 -12 Td
 (    - Jos paamittari ja alamittarit eivat tasmay, voit sopia miten erotus jaetaan.) Tj
-0 -11 Td
+0 -12 Td
 (    - Oletus on ohittaa. Kayta 50/50 tai suhteellinen vain yhteisella sopimuksella.) Tj
-0 -11 Td
+0 -12 Td
 () Tj
-0 -11 Td
+0 -12 Td
 (Oikaisu / Reconciliation \(korjaukset\)) Tj
-0 -11 Td
+0 -12 Td
 (    - Oikaisu on HSY:n korjaus aiemmin arvioituihin laskuihin.) Tj
-0 -11 Td
+0 -12 Td
 (    - Kayta tata sivua vain, kun HSY lahettaa oikaisun.) Tj
-0 -11 Td
+0 -12 Td
 (    - Syota positiivinen summa lisamaksulle tai negatiivinen hyvitykselle.) Tj
-0 -11 Td
+0 -12 Td
 (    - Valitse kulutus tallennetuista jaksoista tai syota se manuaalisesti.) Tj
-0 -11 Td
+0 -12 Td
 (    - Summa jaetaan alamittarien kulutuksen suhteessa.) Tj
-0 -11 Td
+0 -12 Td
 (    - Jos summa on positiivinen, Ameen maksaa Jussille, koska Jussi maksaa HSY:lle.) Tj
-0 -11 Td
+0 -12 Td
 () Tj
-0 -11 Td
+0 -12 Td
 (Historia) Tj
-0 -11 Td
+0 -12 Td
 (    - History-sivu nayttaa aiemmat jaksot ja lasketut osuudet.) Tj
-0 -11 Td
+0 -12 Td
 (    - Tiedot tallennetaan yhteiseen Google Sheet -taulukkoon. Ameen jakaa linkin Jussille.) Tj
-0 -11 Td
+0 -12 Td
 () Tj
-0 -11 Td
+0 -12 Td
 (HSY-laskutusjaksot \(4 kertaa vuodessa 2026\)) Tj
-0 -11 Td
+0 -12 Td
 (    01/01/2026 - 31/03/2026) Tj
-0 -11 Td
+0 -12 Td
 (    01/04/2026 - 30/06/2026) Tj
-0 -11 Td
+0 -12 Td
 (    01/07/2026 - 30/09/2026) Tj
-0 -11 Td
+0 -12 Td
 (    01/10/2026 - 31/12/2026) Tj
-0 -11 Td
+0 -12 Td
 () Tj
-0 -11 Td
+0 -12 Td
 (Milloin alamittarin lukemat otetaan \(2026\)) Tj
-0 -11 Td
-(  Mene huoltotilaan nailla paivilla:) Tj
-0 -11 Td
-(    31/03/2026 ? Q1 loppu, Q2 alku) Tj
-0 -11 Td
-(    30/06/2026 ? Q2 loppu, Q3 alku) Tj
-0 -11 Td
-(    30/09/2026 ? Q3 loppu, Q4 alku) Tj
-0 -11 Td
-(    31/12/2026 ? Q4 loppu, Q1 2027 alku) Tj
-0 -11 Td
-(  - Yksi lukema toimii seka edellisen jakson loppuna etta seuraavan alkuna.) Tj
-0 -11 Td
-(  - Parhaat ajat: Myohaan illalla \(22:00-23:59\) viimeisena paivana,) Tj
-0 -11 Td
-(    TAI aikaisin aamulla \(06:00-08:00\) uuden jakson ensimmaisena paivana.) Tj
-0 -11 Td
-(  - Yonaikainen vedenkulutus on minimaalista, joten kumpi tahansa aika sopii.) Tj
-0 -11 Td
-(  - Ameen menee myos nailla paivilla huoltotilaan ottamaan lukemat.) Tj
-0 -11 Td
-(  - Molempien tulisi ottaa lukemat samaan aikaan tarkan laskutuksen varmistamiseksi.) Tj
-0 -11 Td
+0 -12 Td
 ET
 endstream
 endobj
 5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 6 0 R /Resources << /Font << /F1 7 0 R >> >> >>
+endobj
+6 0 obj
+<< /Length 813 >>
+stream
+BT
+/F1 9 Tf
+48 744 Td
+(  Mene huoltotilaan nailla paivilla:) Tj
+0 -12 Td
+(    31/03/2026 ? Q1 loppu, Q2 alku) Tj
+0 -12 Td
+(    30/06/2026 ? Q2 loppu, Q3 alku) Tj
+0 -12 Td
+(    30/09/2026 ? Q3 loppu, Q4 alku) Tj
+0 -12 Td
+(    31/12/2026 ? Q4 loppu, Q1 2027 alku) Tj
+0 -12 Td
+(  - Yksi lukema toimii seka edellisen jakson loppuna etta seuraavan alkuna.) Tj
+0 -12 Td
+(  - Parhaat ajat: Myohaan illalla \(21:00-23:59\) viimeisena paivana,) Tj
+0 -12 Td
+(    TAI aikaisin aamulla \(06:00-08:00\) uuden jakson ensimmaisena paivana.) Tj
+0 -12 Td
+(  - Yonaikainen vedenkulutus on minimaalista, joten kumpi tahansa aika sopii.) Tj
+0 -12 Td
+(  - Ameen menee myos nailla paivilla huoltotilaan ottamaan lukemat.) Tj
+0 -12 Td
+(  - Molempien tulisi ottaa lukemat samaan aikaan tarkan laskutuksen varmistamiseksi.) Tj
+0 -12 Td
+ET
+endstream
+endobj
+7 0 obj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
 endobj
 xref
-0 6
+0 8
 0000000000 65535 f 
 0000000009 00000 n 
 0000000058 00000 n 
-0000000115 00000 n 
-0000000241 00000 n 
-0000004102 00000 n 
+0000000121 00000 n 
+0000000247 00000 n 
+0000003302 00000 n 
+0000003428 00000 n 
+0000004292 00000 n 
 trailer
-<< /Size 6 /Root 1 0 R >>
+<< /Size 8 /Root 1 0 R >>
 startxref
-4172
+4362
 %%EOF

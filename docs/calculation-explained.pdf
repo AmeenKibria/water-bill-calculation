@@ -1,0 +1,279 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 5 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 7 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 2440 >>
+stream
+BT
+/F1 9 Tf
+/F1 12 Tf
+153.12 744 Td
+(How the Water Bill Split Works - Hirvensarvi 16 B) Tj
+/F1 9 Tf
+-105.12 -16 Td
+() Tj
+0 -12 Td
+(This document explains how we fairly split the water bill between Ameen \(AS-1\) and Jussi \(AS-2\).) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(THE BASIC IDEA) Tj
+0 -12 Td
+(--------------) Tj
+0 -12 Td
+(- Basic fees \(perusmaksu\): Split 50/50 because they're fixed charges for the property) Tj
+0 -12 Td
+(- Consumption fees \(kayttomaksut\): Split by actual water usage from sub-meters) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(THE MATH \(with example\)) Tj
+0 -12 Td
+(-----------------------) Tj
+0 -12 Td
+(Let's say the HSY bill shows:) Tj
+0 -12 Td
+(  - Basic fees total: 84,00 EUR) Tj
+0 -12 Td
+(  - Consumption total: 222,00 EUR) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(And the sub-meter readings show:) Tj
+0 -12 Td
+(  - Ameen used: 12 m3) Tj
+0 -12 Td
+(  - Jussi used: 18 m3) Tj
+0 -12 Td
+(  - Total sub-meter: 30 m3) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Step 1: Calculate each person's share of consumption) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Ameen's fraction = 12 / 30 = 0.40 \(40%\)) Tj
+0 -12 Td
+(  Jussi's fraction = 18 / 30 = 0.60 \(60%\)) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Step 2: Apply fractions to consumption fees) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Ameen's consumption cost = 222,00 EUR x 0.40 = 88,80 EUR) Tj
+0 -12 Td
+(  Jussi's consumption cost = 222,00 EUR x 0.60 = 133,20 EUR) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Step 3: Split basic fees 50/50) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Ameen's basic fee = 84,00 EUR / 2 = 42,00 EUR) Tj
+0 -12 Td
+(  Jussi's basic fee = 84,00 EUR / 2 = 42,00 EUR) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Step 4: Add them up) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Ameen's total = 42,00 + 88,80 = 130,80 EUR) Tj
+0 -12 Td
+(  Jussi's total = 42,00 + 133,20 = 175,20 EUR) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Combined = 130,80 + 175,20 = 306,00 EUR \(matches the bill!\)) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(THE FORMULAS) Tj
+0 -12 Td
+(------------) Tj
+0 -12 Td
+(If you want the exact formulas:) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  A = Ameen's water usage \(m3\)) Tj
+0 -12 Td
+(  J = Jussi's water usage \(m3\)) Tj
+0 -12 Td
+(  B = Basic fees total \(EUR\)) Tj
+0 -12 Td
+(  T = Consumption fees total \(EUR\)) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Ameen pays = B/2 + T x \(A / \(A + J\)\)) Tj
+0 -12 Td
+(  Jussi pays = B/2 + T x \(J / \(A + J\)\)) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(SETTLEMENT) Tj
+0 -12 Td
+(----------) Tj
+0 -12 Td
+(Since Jussi pays the HSY bill directly, the settlement is simple:) Tj
+0 -12 Td
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 6 0 R /Resources << /Font << /F1 7 0 R >> >> >>
+endobj
+6 0 obj
+<< /Length 2483 >>
+stream
+BT
+/F1 9 Tf
+48 744 Td
+(  - Ameen pays Jussi his share) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(In the example above: Ameen pays Jussi 130,80 EUR) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(WHEN IS THE MAIN METER CONSIDERED?) Tj
+0 -12 Td
+(----------------------------------) Tj
+0 -12 Td
+(The app can optionally use the main meter reading to detect mismatch.) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Mismatch \(D\) = Main meter - \(Ameen's sub-meter + Jussi's sub-meter\)) Tj
+0 -12 Td
+(  D = M - \(A + J\)) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Why mismatch happens:) Tj
+0 -12 Td
+(  - Small measurement differences between meters) Tj
+0 -12 Td
+(  - Meter reading timing differences \(a few hours apart\)) Tj
+0 -12 Td
+(  - Meter calibration variations) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(DEFAULT: "Ignore mismatch") Tj
+0 -12 Td
+(  Mismatch is shown for information only.) Tj
+0 -12 Td
+(  Costs are split using sub-meter readings as-is.) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(OPTION A: "Split mismatch 50/50" \(if both agree\)) Tj
+0 -12 Td
+(  Each person gets half the mismatch added to their usage:) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Adjusted Ameen = A + D/2) Tj
+0 -12 Td
+(  Adjusted Jussi = J + D/2) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Then split costs using the adjusted values.) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(OPTION B: "Split mismatch proportional" \(if both agree\)) Tj
+0 -12 Td
+(  Mismatch is added based on each person's usage ratio:) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Adjusted Ameen = A + D x \(A / \(A + J\)\)) Tj
+0 -12 Td
+(  Adjusted Jussi = J + D x \(J / \(A + J\)\)) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Then split costs using the adjusted values.) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Example \(proportional\):) Tj
+0 -12 Td
+(  Main meter \(M\): 32 m3) Tj
+0 -12 Td
+(  Ameen \(A\): 12 m3, Jussi \(J\): 18 m3) Tj
+0 -12 Td
+(  Mismatch \(D\): 32 - 30 = 2 m3) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Ameen's fraction = 12/30 = 0.40) Tj
+0 -12 Td
+(  Jussi's fraction = 18/30 = 0.60) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Adjusted Ameen = 12 + \(2 x 0.40\) = 12.8 m3) Tj
+0 -12 Td
+(  Adjusted Jussi = 18 + \(2 x 0.60\) = 19.2 m3) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(  Costs are then split using 12.8 and 19.2 instead of 12 and 18.) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(WHY THIS IS FAIR) Tj
+0 -12 Td
+(----------------) Tj
+0 -12 Td
+(- You pay for what you use) Tj
+0 -12 Td
+(- Basic fees are shared equally \(both apartments benefit\)) Tj
+0 -12 Td
+(- The math is transparent and verifiable) Tj
+0 -12 Td
+(- History is saved for reference) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Questions? Check the app or ask Ameen.) Tj
+0 -12 Td
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000247 00000 n 
+0000002739 00000 n 
+0000002865 00000 n 
+0000005400 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+5470
+%%EOF
