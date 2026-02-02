@@ -1,4 +1,5 @@
 import csv
+import hashlib
 import io
 import json
 import os
@@ -9,6 +10,54 @@ import gspread
 import streamlit as st
 from google.oauth2.service_account import Credentials
 from streamlit.runtime.secrets import StreamlitSecretNotFoundError
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Authentication
+# ─────────────────────────────────────────────────────────────────────────────
+def hash_password(password: str) -> str:
+    """Hash password using SHA-256."""
+    return hashlib.sha256(password.encode()).hexdigest()
+
+
+def check_credentials(username: str, password: str) -> bool:
+    """Check if username/password match stored credentials."""
+    try:
+        passwords = st.secrets.get("passwords", {})
+        if username.lower() in passwords:
+            stored_hash = passwords[username.lower()]
+            return hash_password(password) == stored_hash
+    except StreamlitSecretNotFoundError:
+        pass
+    return False
+
+
+def login_form():
+    """Display login form and handle authentication."""
+    st.title("Water Bill Split")
+    st.subheader("Login")
+    
+    with st.form("login_form"):
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        submitted = st.form_submit_button("Login")
+        
+        if submitted:
+            if check_credentials(username, password):
+                st.session_state.authenticated = True
+                st.session_state.username = username.lower()
+                st.rerun()
+            else:
+                st.error("Invalid username or password")
+    
+    return False
+
+
+def logout():
+    """Log out the current user."""
+    st.session_state.authenticated = False
+    st.session_state.username = None
+    st.rerun()
 
 from sheets_storage import (
     PERIODS_HEADERS,
@@ -134,6 +183,22 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Authentication check
+# ─────────────────────────────────────────────────────────────────────────────
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+if "username" not in st.session_state:
+    st.session_state.username = None
+
+if not st.session_state.authenticated:
+    login_form()
+    st.stop()
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Main app (only shown when authenticated)
+# ─────────────────────────────────────────────────────────────────────────────
+
 if "language" not in st.session_state:
     st.session_state.language = "English"
 
@@ -174,6 +239,12 @@ page_id = st.sidebar.selectbox(
     ),
     key="page_id",
 )
+
+# User info and logout
+st.sidebar.markdown("---")
+st.sidebar.markdown(f"**{tr('Logged in as', 'Kirjautunut')}:** {st.session_state.username.capitalize()}")
+if st.sidebar.button(tr("Logout", "Kirjaudu ulos")):
+    logout()
 
 st.title(tr("Water Bill Split", "Vesilaskun jako"))
 
