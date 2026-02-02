@@ -1,0 +1,168 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 3432 >>
+stream
+BT
+/F1 9 Tf
+48 744 Td
+ET
+BT
+/F1 12 Tf
+196.80 744 Td
+(Water Bill Split - Hirvensarvi 16 B) Tj
+ET
+BT
+/F1 9 Tf
+48 733 Td
+() Tj
+0 -11 Td
+(When a new HSY bill arrives) Tj
+0 -11 Td
+(1\) Note the billing period start/end dates.) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+(2\) Note the totals:) Tj
+0 -11 Td
+(    - Basic fees total \(perusmaksu\)) Tj
+0 -11 Td
+(    - Consumption total \(kayttomaksut\)) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+(3\) Read sub-meters at the start and end of the same period:) Tj
+0 -11 Td
+(    - AS-1 \(Ameen\)) Tj
+0 -11 Td
+(    - AS-2 \(Jussi\)) Tj
+0 -11 Td
+(    - Go to the maintenance room and take a photo of both readings.) Tj
+0 -11 Td
+(    - Take the start reading on the first day of the period.) Tj
+0 -11 Td
+(    - Take the end reading on the last day \(evening\) or the next morning.) Tj
+0 -11 Td
+(    - Note: Jussi will go to the maintenance room on these days to take the readings,) Tj
+0 -11 Td
+(    and Ameen will do the same.) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+(4\) In the app: Split current bill) Tj
+0 -11 Td
+(    - Enter period, totals, and sub-meter readings \(or usage only\).) Tj
+0 -11 Td
+(    - Optional: add main meter readings to see mismatch status.) Tj
+0 -11 Td
+(    - Click Calculate split.) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+(5\) Use the Settlement line and WhatsApp copy/paste.) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+(6\) Keep "Save this period to history" checked.) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+(Mismatch policy) Tj
+0 -11 Td
+(    - Default is display-only \(ignore mismatch\).) Tj
+0 -11 Td
+(    - Manual override is available:) Tj
+0 -11 Td
+(    - Split mismatch 50/50) Tj
+0 -11 Td
+(    - Split mismatch proportional) Tj
+0 -11 Td
+(    - Use override only if both parties agree.) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+(Why this option exists) Tj
+0 -11 Td
+(    - If main meter and sub-meters do not match, you can decide how to handle the difference.) Tj
+0 -11 Td
+(    - Default is to ignore it. Use 50/50 or proportional only when you agree.) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+(True-up / Reconciliation \(corrections\)) Tj
+0 -11 Td
+(    - A true-up is an HSY correction of earlier estimated bills.) Tj
+0 -11 Td
+(    - Use this page only when HSY sends a correction.) Tj
+0 -11 Td
+(    - Enter a positive amount for an extra charge or a negative amount for a credit.) Tj
+0 -11 Td
+(    - Select usage from saved periods or enter it manually.) Tj
+0 -11 Td
+(    - The amount is split proportionally by sub-meter usage.) Tj
+0 -11 Td
+(    - If the amount is positive, Ameen reimburses Jussi, since Jussi pays HSY.) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+(History) Tj
+0 -11 Td
+(    - History page shows past periods and computed shares.) Tj
+0 -11 Td
+(    - Data is saved in a shared Google Sheet. Ameen will share the link with Jussi.) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+(HSY billing periods \(4x per year in 2026\)) Tj
+0 -11 Td
+(    01/01/2026 - 31/03/2026) Tj
+0 -11 Td
+(    01/04/2026 - 30/06/2026) Tj
+0 -11 Td
+(    01/07/2026 - 30/09/2026) Tj
+0 -11 Td
+(    01/10/2026 - 31/12/2026) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+(When to take sub-meter readings \(2026\)) Tj
+0 -11 Td
+(    01/01/2026 \(start\) and 31/03/2026 \(end\)) Tj
+0 -11 Td
+(    01/04/2026 \(start\) and 30/06/2026 \(end\)) Tj
+0 -11 Td
+(    01/07/2026 \(start\) and 30/09/2026 \(end\)) Tj
+0 -11 Td
+(    01/10/2026 \(start\) and 31/12/2026 \(end\)) Tj
+0 -11 Td
+(  - If needed, end readings can be taken the next morning.) Tj
+0 -11 Td
+(  - Ameen also will go on these dates to the maintenance room to take the readings.) Tj
+0 -11 Td
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000003725 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+3795
+%%EOF

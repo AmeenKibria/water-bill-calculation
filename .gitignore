@@ -1,0 +1,7 @@
+.venv/
+.streamlit/secrets.toml
+data/history.json
+docs/*.txt
+durable-limiter-456709-k3-d70697c888b2.json
+__pycache__/
+*.pyc

@@ -1,0 +1,170 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 3441 >>
+stream
+BT
+/F1 9 Tf
+48 744 Td
+ET
+BT
+/F1 12 Tf
+199.92 744 Td
+(Vesilaskun jako - Hirvensarvi 16 B) Tj
+ET
+BT
+/F1 9 Tf
+48 733 Td
+() Tj
+0 -11 Td
+(Kun uusi HSY-lasku saapuu) Tj
+0 -11 Td
+(1\) Merkitse laskutusjakson alku- ja loppupaiva.) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+(2\) Merkitse kokonaissummat:) Tj
+0 -11 Td
+(    - Perusmaksut yhteensa) Tj
+0 -11 Td
+(    - Kayttomaksut yhteensa) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+(3\) Lue alamittarit jakson alussa ja lopussa:) Tj
+0 -11 Td
+(    - AS-1 \(Ameen\)) Tj
+0 -11 Td
+(    - AS-2 \(Jussi\)) Tj
+0 -11 Td
+(    - Mene huoltotilaan ja ota kuva molemmista mittareista.) Tj
+0 -11 Td
+(    - Ota aloituslukema jakson ensimmaisena paivana.) Tj
+0 -11 Td
+(    - Ota lopetuslukema viimeisena paivana \(ilta\) tai seuraavana aamuna.) Tj
+0 -11 Td
+(    - Huom: Jussi menee huoltotilaan nailla paivilla ottamaan lukemat,) Tj
+0 -11 Td
+(    ja Ameen tekee samoin.) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+(4\) Sovelluksessa: Split current bill) Tj
+0 -11 Td
+(    - Syota jakso, summat ja alamittarilukemat \(tai pelkka kulutus\).) Tj
+0 -11 Td
+(    - Valinnaisesti: lisaa paamittarin lukemat, jotta nayet poikkeaman.) Tj
+0 -11 Td
+(    - Paina Calculate split.) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+(5\) Kayta Settlement-rivia ja WhatsApp-kopiointia.) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+(6\) Pida "Save this period to history" valittuna.) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+(Poikkeamapolitiikka \(mismatch\)) Tj
+0 -11 Td
+(    - Oletus on vain naytto \(poikkeama ei vaikuta jakoon\).) Tj
+0 -11 Td
+(    - Manuaalinen yliajo on saatavilla:) Tj
+0 -11 Td
+(    - Jaa poikkeama 50/50) Tj
+0 -11 Td
+(    - Jaa poikkeama suhteessa kulutukseen) Tj
+0 -11 Td
+(    - Kayta yliajoa vain, jos molemmat sopivat.) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+(Miksi tama asetus on olemassa) Tj
+0 -11 Td
+(    - Jos paamittari ja alamittarit eivat tasmay, voit sopia miten erotus jaetaan.) Tj
+0 -11 Td
+(    - Oletus on ohittaa. Kayta 50/50 tai suhteellinen vain yhteisella sopimuksella.) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+(Oikaisu / Reconciliation \(korjaukset\)) Tj
+0 -11 Td
+(    - Oikaisu on HSY:n korjaus aiemmin arvioituihin laskuihin.) Tj
+0 -11 Td
+(    - Kayta tata sivua vain, kun HSY lahettaa oikaisun.) Tj
+0 -11 Td
+(    - Syota positiivinen summa lisamaksulle tai negatiivinen hyvitykselle.) Tj
+0 -11 Td
+(    - Valitse kulutus tallennetuista jaksoista tai syota se manuaalisesti.) Tj
+0 -11 Td
+(    - Summa jaetaan alamittarien kulutuksen suhteessa.) Tj
+0 -11 Td
+(    - Jos summa on positiivinen, Ameen maksaa Jussille, koska Jussi maksaa HSY:lle.) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+(Historia) Tj
+0 -11 Td
+(    - History-sivu nayttaa aiemmat jaksot ja lasketut osuudet.) Tj
+0 -11 Td
+(    - Tiedot tallennetaan yhteiseen Google Sheet -taulukkoon. Ameen jakaa linkin Jussille.) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+(HSY-laskutusjaksot \(4 kertaa vuodessa 2026\)) Tj
+0 -11 Td
+(    01/01/2026 - 31/03/2026) Tj
+0 -11 Td
+(    01/04/2026 - 30/06/2026) Tj
+0 -11 Td
+(    01/07/2026 - 30/09/2026) Tj
+0 -11 Td
+(    01/10/2026 - 31/12/2026) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+(Milloin alamittarin lukemat otetaan \(2026\)) Tj
+0 -11 Td
+(    01/01/2026 \(alku\) ja 31/03/2026 \(loppu\)) Tj
+0 -11 Td
+(    01/04/2026 \(alku\) ja 30/06/2026 \(loppu\)) Tj
+0 -11 Td
+(    01/07/2026 \(alku\) ja 30/09/2026 \(loppu\)) Tj
+0 -11 Td
+(    01/10/2026 \(alku\) ja 31/12/2026 \(loppu\)) Tj
+0 -11 Td
+(  - Tarvittaessa loppulukema voidaan ottaa seuraavana aamuna.) Tj
+0 -11 Td
+(  - Ameen menee myös nailla paivilla huoltotilaan ottamaan lukemat.) Tj
+0 -11 Td
+() Tj
+0 -11 Td
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000003734 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+3804
+%%EOF
