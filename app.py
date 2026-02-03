@@ -15,9 +15,23 @@ from streamlit.runtime.secrets import StreamlitSecretNotFoundError
 # ─────────────────────────────────────────────────────────────────────────────
 # Authentication
 # ─────────────────────────────────────────────────────────────────────────────
+SESSION_SECRET = "water_bill_hirvensarvi_16b"  # Used for session token generation
+
+
 def hash_password(password: str) -> str:
     """Hash password using SHA-256."""
     return hashlib.sha256(password.encode()).hexdigest()
+
+
+def generate_session_token(username: str) -> str:
+    """Generate a session token for persistent login."""
+    return hashlib.sha256(f"{username}:{SESSION_SECRET}".encode()).hexdigest()[:16]
+
+
+def validate_session_token(username: str, token: str) -> bool:
+    """Validate a session token."""
+    expected = generate_session_token(username)
+    return token == expected
 
 
 def check_credentials(username: str, password: str) -> bool:
@@ -30,6 +44,34 @@ def check_credentials(username: str, password: str) -> bool:
     except StreamlitSecretNotFoundError:
         pass
     return False
+
+
+def restore_session():
+    """Try to restore session from query params."""
+    params = st.query_params
+    if "user" in params and "token" in params:
+        username = params["user"]
+        token = params["token"]
+        if validate_session_token(username, token):
+            st.session_state.authenticated = True
+            st.session_state.username = username
+            return True
+    return False
+
+
+def save_session(username: str):
+    """Save session to query params for persistence across reloads."""
+    token = generate_session_token(username)
+    st.query_params["user"] = username
+    st.query_params["token"] = token
+
+
+def clear_session():
+    """Clear session from query params."""
+    if "user" in st.query_params:
+        del st.query_params["user"]
+    if "token" in st.query_params:
+        del st.query_params["token"]
 
 
 def login_form():
@@ -46,6 +88,7 @@ def login_form():
             if check_credentials(username, password):
                 st.session_state.authenticated = True
                 st.session_state.username = username.lower()
+                save_session(username.lower())
                 st.rerun()
             else:
                 st.error("Invalid username or password")
@@ -57,6 +100,7 @@ def logout():
     """Log out the current user."""
     st.session_state.authenticated = False
     st.session_state.username = None
+    clear_session()
     st.rerun()
 
 from sheets_storage import (
@@ -230,6 +274,10 @@ if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 if "username" not in st.session_state:
     st.session_state.username = None
+
+# Try to restore session from URL params (persists across page reloads)
+if not st.session_state.authenticated:
+    restore_session()
 
 if not st.session_state.authenticated:
     login_form()
