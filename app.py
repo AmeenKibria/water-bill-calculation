@@ -213,15 +213,21 @@ def clear_records_cache():
         get_records.clear()
 
 
-def append_record(tab_name: str, headers: list[str], record: dict):
+def append_record(tab_name: str, headers: list[str], record: dict) -> bool:
+    """Append a record to Google Sheets. Returns True if successful."""
     sheet = get_sheet()
     if sheet is None:
-        return
-    worksheet = sheet.worksheet(tab_name)
-    row = [record.get(header, "") for header in headers]
-    worksheet.append_row(row, value_input_option="RAW")
-    # Clear cache so fresh data is shown
-    clear_records_cache()
+        return False
+    try:
+        worksheet = sheet.worksheet(tab_name)
+        row = [record.get(header, "") for header in headers]
+        worksheet.append_row(row, value_input_option="RAW")
+        # Clear cache so fresh data is shown
+        clear_records_cache()
+        return True
+    except Exception as e:
+        st.error(tr(f"Error saving to Google Sheets: {e}", f"Virhe tallennettaessa Google Sheetsiin: {e}"))
+        return False
 
 
 def local_periods_records() -> list[dict]:
@@ -822,9 +828,11 @@ if page_id == "split":
                     "Saved at": datetime.now().strftime("%d/%m/%Y %H:%M"),
                 }
                 if get_sheet():
-                    append_record("periods", PERIODS_HEADERS, record)
-                    st.success(tr("Saved to history.", "Tallennettu historiaan."))
+                    if append_record("periods", PERIODS_HEADERS, record):
+                        st.success(tr("Saved to history (Google Sheets).", "Tallennettu historiaan (Google Sheets)."))
+                    # Error message already shown by append_record if failed
                 else:
+                    st.warning(tr("Google Sheets not configured. Saving locally.", "Google Sheets ei ole määritetty. Tallennetaan paikallisesti."))
                     history = load_local_history()
                     history.append(
                         {
@@ -1047,13 +1055,14 @@ elif page_id == "trueup":
                     "Saved at": datetime.now().strftime("%d/%m/%Y %H:%M"),
                 }
                 if get_sheet():
-                    append_record("trueups", TRUEUPS_HEADERS, record)
-                    st.success(tr("Saved to history.", "Tallennettu historiaan."))
+                    if append_record("trueups", TRUEUPS_HEADERS, record):
+                        st.success(tr("Saved to history (Google Sheets).", "Tallennettu historiaan (Google Sheets)."))
+                    # Error message already shown by append_record if failed
                 else:
                     st.warning(
                         tr(
-                            "Sheets not configured; true-up was not saved.",
-                            "Sheets ei ole konfiguroitu; oikaisua ei tallennettu.",
+                            "Google Sheets not configured; true-up was not saved.",
+                            "Google Sheets ei ole määritetty; oikaisua ei tallennettu.",
                         )
                     )
 
@@ -1061,10 +1070,29 @@ elif page_id == "history":
     st.header(tr("History", "Historia"))
     st.caption(tr("Saved billing periods and computed shares.", "Tallennetut jaksot ja lasketut osuudet."))
     
-    # Cache refresh button
-    if st.button(tr("🔄 Refresh data", "🔄 Päivitä tiedot"), help=tr("Clear cache and reload from Google Sheets", "Tyhjennä välimuisti ja lataa uudelleen")):
-        clear_records_cache()
-        st.rerun()
+    # Cache refresh and clear buttons
+    btn_col1, btn_col2 = st.columns(2)
+    with btn_col1:
+        if st.button(tr("🔄 Refresh data", "🔄 Päivitä tiedot"), help=tr("Clear cache and reload from Google Sheets", "Tyhjennä välimuisti ja lataa uudelleen")):
+            clear_records_cache()
+            st.rerun()
+    with btn_col2:
+        if st.button(
+            tr("🗑️ Clear local history", "🗑️ Tyhjennä paikallinen historia"), 
+            help=tr(
+                "For development/testing only. If History shows data but Google Sheet is empty, "
+                "click this to clear local cache. History should match Google Sheet.",
+                "Vain kehitystä/testausta varten. Jos Historia näyttää dataa mutta Google Sheet on tyhjä, "
+                "klikkaa tätä tyhjentääksesi paikallisen välimuistin. Historian pitäisi vastata Google Sheetiä."
+            )
+        ):
+            local_file = DATA_DIR / "history.json"
+            if local_file.exists():
+                local_file.unlink()
+                st.success(tr("Local history cleared. History now matches Google Sheet.", "Paikallinen historia tyhjennetty. Historia vastaa nyt Google Sheetiä."))
+                st.rerun()
+            else:
+                st.info(tr("No local history to clear.", "Ei paikallista historiaa tyhjennettäväksi."))
     
     period_records = get_records("periods")
     if not period_records:
