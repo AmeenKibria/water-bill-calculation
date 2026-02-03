@@ -3,13 +3,13 @@
 << /Type /Catalog /Pages 2 0 R >>
 endobj
 2 0 obj
-<< /Type /Pages /Kids [3 0 R 5 0 R] /Count 2 >>
+<< /Type /Pages /Kids [3 0 R 5 0 R 7 0 R] /Count 3 >>
 endobj
 3 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 7 0 R >> >> >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 9 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 2402 >>
+<< /Length 2364 >>
 stream
 BT
 /F1 9 Tf
@@ -43,6 +43,8 @@ BT
 (  - Perusmaksut yhteensa: 84,00 EUR) Tj
 0 -12 Td
 (  - Kayttomaksut yhteensa: 222,00 EUR) Tj
+0 -12 Td
+(  - Lasku yhteensa: 306,00 EUR) Tj
 0 -12 Td
 () Tj
 0 -12 Td
@@ -128,21 +130,21 @@ BT
 0 -12 Td
 (---------------) Tj
 0 -12 Td
-(Koska Jussi maksaa HSY-laskun suoraan, jarjestely on yksinkertainen:) Tj
-0 -12 Td
 ET
 endstream
 endobj
 5 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 6 0 R /Resources << /Font << /F1 7 0 R >> >> >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 6 0 R /Resources << /Font << /F1 9 0 R >> >> >>
 endobj
 6 0 obj
-<< /Length 2551 >>
+<< /Length 2767 >>
 stream
 BT
 /F1 9 Tf
 48 744 Td
-(  - Ameen maksaa Jussille oman osuutensa) Tj
+(Koska Jussi maksaa HSY-laskun suoraan, jarjestely on yksinkertainen:) Tj
+0 -12 Td
+(  - Ameen maksaa Jussille oman lasketun osuutensa) Tj
 0 -12 Td
 () Tj
 0 -12 Td
@@ -154,7 +156,9 @@ BT
 0 -12 Td
 (------------------------------------) Tj
 0 -12 Td
-(Sovellus voi valinnaisesti kayttaa paamittarin lukemaa poikkeaman havaitsemiseen.) Tj
+(Paamittarin lukema on VALINNAINEN. Sita kaytetaan vain poikkeaman) Tj
+0 -12 Td
+(havaitsemiseen paamittarin ja alamittarien valilla.) Tj
 0 -12 Td
 () Tj
 0 -12 Td
@@ -164,7 +168,7 @@ BT
 0 -12 Td
 () Tj
 0 -12 Td
-(Miksi poikkeamaa syntyy:) Tj
+(Miksi poikkeamaa voi syntyy:) Tj
 0 -12 Td
 (  - Pienet mittauserot mittarien valilla) Tj
 0 -12 Td
@@ -179,6 +183,8 @@ BT
 (  Poikkeama naytetaan vain tiedoksi.) Tj
 0 -12 Td
 (  Kustannukset jaetaan alamittarien lukemien mukaan.) Tj
+0 -12 Td
+(  Tama on suositeltu asetus.) Tj
 0 -12 Td
 () Tj
 0 -12 Td
@@ -240,17 +246,67 @@ BT
 0 -12 Td
 () Tj
 0 -12 Td
+(OIKAISU / RECONCILIATION) Tj
+0 -12 Td
+(------------------------) Tj
+0 -12 Td
+(Kun HSY lahettaa korjauksen \(oikaisu\) arvioituihin laskuihin:) Tj
+0 -12 Td
+(  - Syota korjaussumma \(positiivinen lisamaksulle, negatiivinen hyvitykselle\)) Tj
+0 -12 Td
+(  - Summa jaetaan kulutuksen suhteessa) Tj
+0 -12 Td
+(  - Jos positiivinen, Ameen maksaa Jussille. Jos negatiivinen, Jussi hyvittaa Ameenille.) Tj
+0 -12 Td
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 8 0 R /Resources << /Font << /F1 9 0 R >> >> >>
+endobj
+8 0 obj
+<< /Length 1044 >>
+stream
+BT
+/F1 9 Tf
+48 744 Td
+() Tj
+0 -12 Td
 (MIKSI TAMA ON REILU) Tj
 0 -12 Td
 (-------------------) Tj
 0 -12 Td
 (- Maksat siita mita kaytat) Tj
 0 -12 Td
-(- Perusmaksut jaetaan tasaisesti \(molemmat asunnot hyotyvat\)) Tj
+(- Perusmaksut jaetaan tasaisesti \(molemmat asunnot hyotyvat liittymasta\)) Tj
 0 -12 Td
 (- Matematiikka on lapinakyva ja tarkistettavissa) Tj
 0 -12 Td
-(- Historia tallennetaan viitteeksi) Tj
+(- Historia tallennetaan viitteeksi ja tarkistusta varten) Tj
+0 -12 Td
+(- Molemmat osapuolet nakevat kaikki laskelmat ja tiedot) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(JOKAISESTA JAKSOSTA TALLENNETAAN) Tj
+0 -12 Td
+(--------------------------------) Tj
+0 -12 Td
+(- Laskun numero, arvioitu vesimaara, erapaiva) Tj
+0 -12 Td
+(- Laskutusjakson paivamaarat) Tj
+0 -12 Td
+(- Mittarinlukupaivat ja -ajat) Tj
+0 -12 Td
+(- Paamittarin kulutus \(valinnainen\)) Tj
+0 -12 Td
+(- Alamittarien kulutus \(AS-1 ja AS-2\)) Tj
+0 -12 Td
+(- Perusmaksut ja kayttomaksut) Tj
+0 -12 Td
+(- Lasketut osuudet kummallekin osapuolelle) Tj
+0 -12 Td
+(- Poikkeamatiedot \(jos paamittari annettu\)) Tj
 0 -12 Td
 () Tj
 0 -12 Td
@@ -259,21 +315,23 @@ BT
 ET
 endstream
 endobj
-7 0 obj
+9 0 obj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
 endobj
 xref
-0 8
+0 10
 0000000000 65535 f 
 0000000009 00000 n 
 0000000058 00000 n 
-0000000121 00000 n 
-0000000247 00000 n 
-0000002701 00000 n 
-0000002827 00000 n 
-0000005430 00000 n 
+0000000127 00000 n 
+0000000253 00000 n 
+0000002669 00000 n 
+0000002795 00000 n 
+0000005614 00000 n 
+0000005740 00000 n 
+0000006836 00000 n 
 trailer
-<< /Size 8 /Root 1 0 R >>
+<< /Size 10 /Root 1 0 R >>
 startxref
-5500
+6906
 %%EOF

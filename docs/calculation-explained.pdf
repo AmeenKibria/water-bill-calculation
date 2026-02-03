@@ -3,13 +3,13 @@
 << /Type /Catalog /Pages 2 0 R >>
 endobj
 2 0 obj
-<< /Type /Pages /Kids [3 0 R 5 0 R] /Count 2 >>
+<< /Type /Pages /Kids [3 0 R 5 0 R 7 0 R] /Count 3 >>
 endobj
 3 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 7 0 R >> >> >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 9 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 2440 >>
+<< /Length 2402 >>
 stream
 BT
 /F1 9 Tf
@@ -28,7 +28,7 @@ BT
 0 -12 Td
 (--------------) Tj
 0 -12 Td
-(- Basic fees \(perusmaksu\): Split 50/50 because they're fixed charges for the property) Tj
+(- Basic fees \(perusmaksu\): Split 50/50 because they are fixed charges for the property) Tj
 0 -12 Td
 (- Consumption fees \(kayttomaksut\): Split by actual water usage from sub-meters) Tj
 0 -12 Td
@@ -43,6 +43,8 @@ BT
 (  - Basic fees total: 84,00 EUR) Tj
 0 -12 Td
 (  - Consumption total: 222,00 EUR) Tj
+0 -12 Td
+(  - Total bill: 306,00 EUR) Tj
 0 -12 Td
 () Tj
 0 -12 Td
@@ -128,21 +130,21 @@ BT
 0 -12 Td
 (----------) Tj
 0 -12 Td
-(Since Jussi pays the HSY bill directly, the settlement is simple:) Tj
-0 -12 Td
 ET
 endstream
 endobj
 5 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 6 0 R /Resources << /Font << /F1 7 0 R >> >> >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 6 0 R /Resources << /Font << /F1 9 0 R >> >> >>
 endobj
 6 0 obj
-<< /Length 2483 >>
+<< /Length 2732 >>
 stream
 BT
 /F1 9 Tf
 48 744 Td
-(  - Ameen pays Jussi his share) Tj
+(Since Jussi pays the HSY bill directly, the settlement is simple:) Tj
+0 -12 Td
+(  - Ameen pays Jussi his calculated share) Tj
 0 -12 Td
 () Tj
 0 -12 Td
@@ -154,7 +156,9 @@ BT
 0 -12 Td
 (----------------------------------) Tj
 0 -12 Td
-(The app can optionally use the main meter reading to detect mismatch.) Tj
+(The main meter reading is OPTIONAL. It is used only for detecting mismatch) Tj
+0 -12 Td
+(between the main meter and sub-meters.) Tj
 0 -12 Td
 () Tj
 0 -12 Td
@@ -164,7 +168,7 @@ BT
 0 -12 Td
 () Tj
 0 -12 Td
-(Why mismatch happens:) Tj
+(Why mismatch can happen:) Tj
 0 -12 Td
 (  - Small measurement differences between meters) Tj
 0 -12 Td
@@ -179,6 +183,8 @@ BT
 (  Mismatch is shown for information only.) Tj
 0 -12 Td
 (  Costs are split using sub-meter readings as-is.) Tj
+0 -12 Td
+(  This is the recommended setting.) Tj
 0 -12 Td
 () Tj
 0 -12 Td
@@ -240,17 +246,67 @@ BT
 0 -12 Td
 () Tj
 0 -12 Td
+(TRUE-UP / RECONCILIATION) Tj
+0 -12 Td
+(------------------------) Tj
+0 -12 Td
+(When HSY sends a correction \(oikaisu\) for estimated bills:) Tj
+0 -12 Td
+(  - Enter the correction amount \(positive for extra charge, negative for credit\)) Tj
+0 -12 Td
+(  - The amount is split proportionally by usage) Tj
+0 -12 Td
+(  - If positive, Ameen pays Jussi. If negative, Jussi credits Ameen.) Tj
+0 -12 Td
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 8 0 R /Resources << /Font << /F1 9 0 R >> >> >>
+endobj
+8 0 obj
+<< /Length 979 >>
+stream
+BT
+/F1 9 Tf
+48 744 Td
+() Tj
+0 -12 Td
 (WHY THIS IS FAIR) Tj
 0 -12 Td
 (----------------) Tj
 0 -12 Td
 (- You pay for what you use) Tj
 0 -12 Td
-(- Basic fees are shared equally \(both apartments benefit\)) Tj
+(- Basic fees are shared equally \(both apartments benefit from the connection\)) Tj
 0 -12 Td
 (- The math is transparent and verifiable) Tj
 0 -12 Td
-(- History is saved for reference) Tj
+(- History is saved for reference and auditing) Tj
+0 -12 Td
+(- Both parties can see all calculations and data) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(DATA SAVED FOR EACH PERIOD) Tj
+0 -12 Td
+(--------------------------) Tj
+0 -12 Td
+(- Invoice number, estimated water, due date) Tj
+0 -12 Td
+(- Billing period dates) Tj
+0 -12 Td
+(- Meter reading dates and times) Tj
+0 -12 Td
+(- Main meter usage \(optional\)) Tj
+0 -12 Td
+(- Sub-meter usage \(AS-1 and AS-2\)) Tj
+0 -12 Td
+(- Basic fees and consumption totals) Tj
+0 -12 Td
+(- Calculated shares for each party) Tj
+0 -12 Td
+(- Mismatch information \(if main meter provided\)) Tj
 0 -12 Td
 () Tj
 0 -12 Td
@@ -259,21 +315,23 @@ BT
 ET
 endstream
 endobj
-7 0 obj
+9 0 obj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
 endobj
 xref
-0 8
+0 10
 0000000000 65535 f 
 0000000009 00000 n 
 0000000058 00000 n 
-0000000121 00000 n 
-0000000247 00000 n 
-0000002739 00000 n 
-0000002865 00000 n 
-0000005400 00000 n 
+0000000127 00000 n 
+0000000253 00000 n 
+0000002707 00000 n 
+0000002833 00000 n 
+0000005617 00000 n 
+0000005743 00000 n 
+0000006773 00000 n 
 trailer
-<< /Size 8 /Root 1 0 R >>
+<< /Size 10 /Root 1 0 R >>
 startxref
-5470
+6843
 %%EOF

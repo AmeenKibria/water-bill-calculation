@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 7 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 3003 >>
+<< /Length 3125 >>
 stream
 BT
 /F1 9 Tf
@@ -26,47 +26,69 @@ BT
 0 -12 Td
 () Tj
 0 -12 Td
-(2\) Merkitse kokonaissummat:) Tj
+(2\) Merkitse laskun tiedot:) Tj
+0 -12 Td
+(    - Laskun numero) Tj
+0 -12 Td
+(    - Laskun arvioitu vesimaara) Tj
+0 -12 Td
+(    - Erapaiva) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(3\) Merkitse kokonaissummat:) Tj
 0 -12 Td
 (    - Perusmaksut yhteensa) Tj
 0 -12 Td
 (    - Kayttomaksut yhteensa) Tj
 0 -12 Td
+(    - Sovellus nayttaa laskun kokonaissumman automaattisesti.) Tj
+0 -12 Td
 () Tj
 0 -12 Td
-(3\) Lue alamittarit jakson alussa ja lopussa:) Tj
+(4\) Kayta jakson alamittarilukemat:) Tj
 0 -12 Td
 (    - AS-1 \(Ameen\)) Tj
 0 -12 Td
 (    - AS-2 \(Jussi\)) Tj
 0 -12 Td
-(    - Mene huoltotilaan ja ota kuva molemmista mittareista.) Tj
+(    - Yksi lukema toimii seka edellisen jakson loppuna etta seuraavan alkuna.) Tj
 0 -12 Td
-(    - Ota aloituslukema jakson ensimmaisena paivana.) Tj
+(    - Joten huoltotilassa tarvitsee kayda vain 4 kertaa vuodessa.) Tj
 0 -12 Td
-(    - Ota lopetuslukema viimeisena paivana \(ilta\) tai seuraavana aamuna.) Tj
+(    - Ameen ja Jussi menevat yhdessa ottamaan kuvat molemmista alamittareista.) Tj
 0 -12 Td
-(    - Huom: Jussi menee huoltotilaan nailla paivilla ottamaan lukemat,) Tj
-0 -12 Td
-(    ja Ameen tekee samoin.) Tj
+(    - Katso "Milloin alamittarin lukemat otetaan" -osio alla tarkat paivamaarat.) Tj
 0 -12 Td
 () Tj
 0 -12 Td
-(4\) Sovelluksessa: Split current bill) Tj
+(5\) Valinnainen: Lue paamittari \(kokonaisluvut, ei desimaaleja\)) Tj
 0 -12 Td
-(    - Syota jakso, summat ja alamittarilukemat \(tai pelkka kulutus\).) Tj
+(    - Kaytetaan vain poikkeaman havaitsemiseen, ei kustannuslaskentaan oletuksena.) Tj
 0 -12 Td
-(    - Valinnaisesti: lisaa paamittarin lukemat, jotta nayet poikkeaman.) Tj
+() Tj
+0 -12 Td
+(6\) Sovelluksessa: Split current bill) Tj
+0 -12 Td
+(    - Syota laskutusjakson paivamaarat.) Tj
+0 -12 Td
+(    - Syota laskun numero, arvioitu vesimaara ja erapaiva.) Tj
+0 -12 Td
+(    - Syota perusmaksut ja kayttomaksut \(kokonaissumma naytetaan automaattisesti\).) Tj
+0 -12 Td
+(    - Syota alamittarilukemat \(tai pelkka kulutus -tila\).) Tj
+0 -12 Td
+(    - Valinnaisesti: lisaa paamittarin lukemat poikkeaman nayttamiseksi.) Tj
 0 -12 Td
 (    - Paina Calculate split.) Tj
 0 -12 Td
 () Tj
 0 -12 Td
-(5\) Kayta Settlement-rivia ja WhatsApp-kopiointia.) Tj
+(7\) Kayta Settlement-rivia ja WhatsApp-kopiointia.) Tj
 0 -12 Td
 () Tj
 0 -12 Td
-(6\) Pida "Save this period to history" valittuna.) Tj
+(8\) Pida "Save this period to history" valittuna.) Tj
 0 -12 Td
 () Tj
 0 -12 Td
@@ -86,7 +108,7 @@ BT
 0 -12 Td
 (Miksi tama asetus on olemassa) Tj
 0 -12 Td
-(    - Jos paamittari ja alamittarit eivat tasmay, voit sopia miten erotus jaetaan.) Tj
+(    - Jos paamittari ja alamittarit eivat tasmaa, voit sopia miten erotus jaetaan.) Tj
 0 -12 Td
 (    - Oletus on ohittaa. Kayta 50/50 tai suhteellinen vain yhteisella sopimuksella.) Tj
 0 -12 Td
@@ -108,11 +130,29 @@ BT
 0 -12 Td
 () Tj
 0 -12 Td
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 6 0 R /Resources << /Font << /F1 7 0 R >> >> >>
+endobj
+6 0 obj
+<< /Length 2054 >>
+stream
+BT
+/F1 9 Tf
+48 744 Td
 (Historia) Tj
 0 -12 Td
 (    - History-sivu nayttaa aiemmat jaksot ja lasketut osuudet.) Tj
 0 -12 Td
 (    - Tiedot tallennetaan yhteiseen Google Sheet -taulukkoon. Ameen jakaa linkin Jussille.) Tj
+0 -12 Td
+(    - Kayta "Paivita tiedot" -painiketta ladataksesi uusimmat tiedot.) Tj
+0 -12 Td
+(    - Lataa CSV- tai PDF-muodossa omiin tietoihisi.) Tj
+0 -12 Td
+(    - Kumulatiiviset summat nayttavat juoksevat summat molemmille osapuolille.) Tj
 0 -12 Td
 () Tj
 0 -12 Td
@@ -130,27 +170,15 @@ BT
 0 -12 Td
 (Milloin alamittarin lukemat otetaan \(2026\)) Tj
 0 -12 Td
-ET
-endstream
-endobj
-5 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 6 0 R /Resources << /Font << /F1 7 0 R >> >> >>
-endobj
-6 0 obj
-<< /Length 813 >>
-stream
-BT
-/F1 9 Tf
-48 744 Td
 (  Mene huoltotilaan nailla paivilla:) Tj
 0 -12 Td
-(    31/03/2026 ? Q1 loppu, Q2 alku) Tj
+(    31/03/2026 - Q1 loppu, Q2 alku) Tj
 0 -12 Td
-(    30/06/2026 ? Q2 loppu, Q3 alku) Tj
+(    30/06/2026 - Q2 loppu, Q3 alku) Tj
 0 -12 Td
-(    30/09/2026 ? Q3 loppu, Q4 alku) Tj
+(    30/09/2026 - Q3 loppu, Q4 alku) Tj
 0 -12 Td
-(    31/12/2026 ? Q4 loppu, Q1 2027 alku) Tj
+(    31/12/2026 - Q4 loppu, Q1 2027 alku) Tj
 0 -12 Td
 (  - Yksi lukema toimii seka edellisen jakson loppuna etta seuraavan alkuna.) Tj
 0 -12 Td
@@ -160,9 +188,27 @@ BT
 0 -12 Td
 (  - Yonaikainen vedenkulutus on minimaalista, joten kumpi tahansa aika sopii.) Tj
 0 -12 Td
-(  - Ameen menee myos nailla paivilla huoltotilaan ottamaan lukemat.) Tj
+(  - Ameen ja Jussi menevat yhdessa huoltotilaan.) Tj
 0 -12 Td
-(  - Molempien tulisi ottaa lukemat samaan aikaan tarkan laskutuksen varmistamiseksi.) Tj
+(  - Ottakaa kuvat molemmista alamittareista samaan aikaan tarkan laskutuksen varmistamiseksi.) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Sovelluksen ominaisuudet yhteenvetona) Tj
+0 -12 Td
+(  - Kaksikielinen tuki: englanti ja suomi) Tj
+0 -12 Td
+(  - Syotteen validointi reaaliaikaisella palautteella) Tj
+0 -12 Td
+(  - Settlement-rivi nayttaa kuka on velkaa kenelle) Tj
+0 -12 Td
+(  - WhatsApp-valmis teksti helppoon jakamiseen) Tj
+0 -12 Td
+(  - Historia tallennetaan Google Sheetsiin) Tj
+0 -12 Td
+(  - PDF- ja CSV-vienti saatavilla) Tj
+0 -12 Td
+(  - Kirjautuminen vaaditaan turvallisuuden vuoksi) Tj
 0 -12 Td
 ET
 endstream
@@ -177,11 +223,11 @@ xref
 0000000058 00000 n 
 0000000121 00000 n 
 0000000247 00000 n 
-0000003302 00000 n 
-0000003428 00000 n 
-0000004292 00000 n 
+0000003424 00000 n 
+0000003550 00000 n 
+0000005656 00000 n 
 trailer
 << /Size 8 /Root 1 0 R >>
 startxref
-4362
+5726
 %%EOF

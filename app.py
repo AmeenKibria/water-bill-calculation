@@ -110,6 +110,7 @@ def load_service_account_info():
     return None
 
 
+@st.cache_resource(ttl=600, show_spinner=False)  # Cache connection for 10 minutes
 def get_sheet():
     try:
         sheet_id = st.secrets.get("SHEET_ID")
@@ -124,12 +125,48 @@ def get_sheet():
     return client.open_by_key(sheet_id)
 
 
+@st.cache_data(ttl=300, show_spinner=False)  # Cache for 5 minutes
 def get_records(tab_name: str) -> list[dict]:
     sheet = get_sheet()
     if sheet is None:
         return []
-    worksheet = sheet.worksheet(tab_name)
-    return worksheet.get_all_records()
+    try:
+        worksheet = sheet.worksheet(tab_name)
+        # Get all values and build records manually to handle empty/duplicate headers
+        all_values = worksheet.get_all_values()
+        if not all_values:
+            return []
+        
+        # Get headers from first row, filter out empty ones
+        headers = all_values[0]
+        # Find indices of non-empty, unique headers
+        seen = set()
+        valid_indices = []
+        clean_headers = []
+        for i, h in enumerate(headers):
+            if h and h not in seen:
+                seen.add(h)
+                valid_indices.append(i)
+                clean_headers.append(h)
+        
+        # Build records from remaining rows
+        records = []
+        for row in all_values[1:]:
+            record = {}
+            for idx, header in zip(valid_indices, clean_headers):
+                record[header] = row[idx] if idx < len(row) else ""
+            records.append(record)
+        return records
+    except Exception as e:
+        st.warning(tr(f"Error reading {tab_name}: {e}", f"Virhe luettaessa {tab_name}: {e}"))
+        return []
+
+
+def clear_records_cache():
+    """Clear the cached records to force fresh data fetch."""
+    # Only works when caching is enabled
+    if hasattr(get_records, 'clear'):
+        get_records.clear()
 
 
 def append_record(tab_name: str, headers: list[str], record: dict):
@@ -138,7 +175,9 @@ def append_record(tab_name: str, headers: list[str], record: dict):
         return
     worksheet = sheet.worksheet(tab_name)
     row = [record.get(header, "") for header in headers]
-    worksheet.append_row(row, value_input_option="USER_ENTERED")
+    worksheet.append_row(row, value_input_option="RAW")
+    # Clear cache so fresh data is shown
+    clear_records_cache()
 
 
 def local_periods_records() -> list[dict]:
@@ -148,17 +187,18 @@ def local_periods_records() -> list[dict]:
             {
                 "Period start": format_date(entry.get("period_start")),
                 "Period end": format_date(entry.get("period_end")),
+                "Invoice number": entry.get("invoice_number"),
+                "Estimated water": entry.get("estimated_water"),
+                "Due date": format_date(entry.get("due_date")),
                 "Reading start": entry.get("reading_start"),
                 "Reading end": entry.get("reading_end"),
+                "Main usage": entry.get("main_use"),
                 "AS-1 usage": entry.get("s1_use"),
                 "AS-2 usage": entry.get("s2_use"),
-                "AS-1 adjusted": entry.get("adj_s1_use"),
-                "AS-2 adjusted": entry.get("adj_s2_use"),
                 "Basic fees": entry.get("basic_fees"),
                 "Usage fees": entry.get("usage_fees"),
                 "AS-1 total": entry.get("total_1"),
                 "AS-2 total": entry.get("total_2"),
-                "Mismatch policy": entry.get("mismatch_policy"),
                 "Mismatch (m3)": entry.get("mismatch_m3"),
                 "Mismatch (%)": entry.get("mismatch_pct"),
                 "Saved at": format_date(entry.get("created_at")),
@@ -210,6 +250,23 @@ def tr(en: str, fi: str) -> str:
     return fi if is_fi else en
 
 
+# Error message translations for exceptions from utils.py
+ERROR_TRANSLATIONS = {
+    "Sub-meter usage cannot be negative.": "Alamittarin kulutus ei voi olla negatiivinen.",
+    "Total sub-meter usage must be greater than 0.": "Alamittarien kokonaiskulutuksen on oltava suurempi kuin 0.",
+    "Main meter usage must be greater than 0.": "Päämittarin kulutuksen on oltava suurempi kuin 0.",
+    "Adjusted usage became negative.": "Oikaistu kulutus muuttui negatiiviseksi.",
+    "Total usage must be greater than 0.": "Kokonaiskulutuksen on oltava suurempi kuin 0.",
+}
+
+
+def tr_error(msg: str) -> str:
+    """Translate error messages from utils.py"""
+    if is_fi and msg in ERROR_TRANSLATIONS:
+        return ERROR_TRANSLATIONS[msg]
+    return msg
+
+
 page_definitions = [
     {"id": "split", "en": "Split current bill", "fi": "Jaa nykyinen lasku"},
     {"id": "trueup", "en": "True-up / Reconciliation", "fi": "Oikaisu / Reconciliation"},
@@ -259,10 +316,10 @@ if page_id == "split":
     st.caption(
         tr(
             "Basic fees are split 50/50. Consumption is split by sub-meter usage.",
-            "Perusmaksu jaetaan 50/50. Kayttomaksu jaetaan kulutuksen mukaan.",
+            "Perusmaksu jaetaan 50/50. Käyttömaksu jaetaan kulutuksen mukaan.",
         )
     )
-    with st.expander(tr("How this works", "Miten tama toimii")):
+    with st.expander(tr("How this works", "Miten tämä toimii")):
         st.markdown(
             tr(
                 "- Basic fees are split 50/50.\n"
@@ -270,80 +327,76 @@ if page_id == "split":
                 "- Mismatch is shown for awareness; default is display-only.\n"
                 "- You can manually override mismatch allocation if needed.",
                 "- Perusmaksu jaetaan 50/50.\n"
-                "- Kayttomaksu jaetaan alamittarien kulutussuhteessa.\n"
-                "- Poikkeama naytetaan; oletus on vain naytto.\n"
+                "- Käyttömaksu jaetaan alamittarien kulutussuhteessa.\n"
+                "- Poikkeama näytetään; oletus on vain näyttö.\n"
                 "- Poikkeaman jaon voi tarvittaessa yliajaa.",
             )
         )
-
-    st.subheader(tr("Main meter (optional, for mismatch display)", "Paamittari (valinnainen, poikkeaman nayttoon)"))
-    with st.expander(
-        tr("Add main meter readings", "Lisaa paamittarin lukemat"),
-        expanded=True,
-    ):
-        st.caption(
-            tr(
-                "Optional: enter the main meter start/end to show mismatch.",
-                "Valinnainen: anna paamittarin alku/loppu poikkeaman nayttoon.",
-            )
-        )
-        use_main = st.checkbox(
-            tr("Provide main meter readings", "Anna paamittarin lukemat"),
-            value=False,
-        )
-        if use_main:
-            main_start = st.number_input(
-                tr("Main start (m3)", "Paamittari alku (m3)"),
-                min_value=0.0,
-                value=0.0,
-                step=None,
-                format="%.3f",
-            )
-            main_end = st.number_input(
-                tr("Main end (m3)", "Paamittari loppu (m3)"),
-                min_value=0.0,
-                value=0.0,
-                step=None,
-                format="%.3f",
-            )
-        else:
-            main_start = None
-            main_end = None
 
     st.subheader(tr("Billing period", "Laskutusjakso"))
     col_period = st.columns(2)
     with col_period[0]:
         period_start = st.date_input(
-            tr("Start date", "Alkupaiva"),
+            tr("Start date", "Alkupäivä"),
             format="DD/MM/YYYY",
         )
     with col_period[1]:
         period_end = st.date_input(
-            tr("End date", "Loppupaiva"),
+            tr("End date", "Loppupäivä"),
             format="DD/MM/YYYY",
+        )
+    
+    col_invoice = st.columns(3)
+    with col_invoice[0]:
+        invoice_number = st.text_input(
+            tr("Invoice number", "Laskun numero"),
+            placeholder="12345",
+            help=tr("Invoice reference number", "Laskun viitenumero"),
+        )
+    with col_invoice[1]:
+        estimated_water_text = st.text_input(
+            tr("Estimated water (m³)", "Arvioitu vesi (m³)"),
+            placeholder="0",
+            help=tr("Estimated water amount on invoice", "Laskun arvioitu vesimäärä"),
+        )
+        estimated_water = parse_number(estimated_water_text)
+    with col_invoice[2]:
+        due_date = st.date_input(
+            tr("Due date", "Eräpäivä"),
+            format="DD/MM/YYYY",
+            help=tr("Payment due date", "Maksun eräpäivä"),
         )
 
     st.subheader(tr("Totals bill", "Laskun summat"))
-    basic_fees_text = st.text_input(
-        tr("Basic fees total", "Perusmaksut yhteensa"),
-        placeholder="0,00€",
-    )
-    usage_fees_text = st.text_input(
-        tr("Consumption total", "Kayttomaksut yhteensa"),
-        placeholder="0,00€",
-    )
+    bill_cols = st.columns([1, 1, 1])
+    with bill_cols[0]:
+        basic_fees_text = st.text_input(
+            tr("Basic fees total", "Perusmaksut yhteensä"),
+            placeholder="0,00€",
+        )
+    with bill_cols[1]:
+        usage_fees_text = st.text_input(
+            tr("Consumption total", "Käyttömaksut yhteensä"),
+            placeholder="0,00€",
+        )
     basic_fees = parse_number(basic_fees_text)
     usage_fees = parse_number(usage_fees_text)
+    with bill_cols[2]:
+        if basic_fees is not None and usage_fees is not None:
+            total_bill = basic_fees + usage_fees
+            st.metric(tr("Total bill", "Lasku yhteensä"), format_eur(total_bill))
+        else:
+            st.metric(tr("Total bill", "Lasku yhteensä"), "-")
 
-    st.subheader(tr("Sub-meter usage (m³)", "Alamittarien kulutus (m³)"))
+    st.subheader(tr("Meter readings (m³)", "Mittarilukemat (m³)"))
     st.caption(
         tr(
-            "Optional: record when the start/end readings were taken.",
-            "Valinnainen: merkitse milloin alku- ja loppulukemat otettiin.",
+            "Enter main meter (optional) and sub-meter readings. Main meter is used for mismatch display.",
+            "Syötä päämittari (valinnainen) ja alamittarilukemat. Päämittaria käytetään poikkeaman näyttöön.",
         )
     )
     usage_mode = st.radio(
-        tr("Input method", "Syottotapa"),
+        tr("Input method", "Syöttötapa"),
         [tr("Readings (start/end)", "Lukemat (alku/loppu)"), tr("Usage only", "Vain kulutus")],
         horizontal=True,
     )
@@ -359,8 +412,12 @@ if page_id == "split":
     s2_start_text = None
     s2_end_text = None
     s2_use_text = None
+    main_start_text = None
+    main_end_text = None
+    main_use_text = None
 
-    row1_cols = st.columns([0.9, 0.6, 1.2, 1.2])
+    # Row 1: Start readings
+    row1_cols = st.columns([0.7, 0.5, 1.0, 1.0, 1.0])
     with row1_cols[0]:
         reading_start_date = st.date_input(
             tr("Reading start", "Lukema alku"),
@@ -375,105 +432,139 @@ if page_id == "split":
         )
     with row1_cols[2]:
         if usage_mode == tr("Readings (start/end)", "Lukemat (alku/loppu)"):
+            main_start_text = st.text_input(
+                tr("Main start", "Päämittari alku"),
+                placeholder="0",
+                help=tr("Optional. Whole number.", "Valinnainen. Kokonaisluku."),
+                key="main_start_text",
+            )
+        else:
+            main_use_text = st.text_input(
+                tr("Main usage (opt)", "Päämittari (val)"),
+                placeholder="0",
+                help=tr("Optional. Whole number.", "Valinnainen. Kokonaisluku."),
+                key="main_use_text",
+            )
+    with row1_cols[3]:
+        if usage_mode == tr("Readings (start/end)", "Lukemat (alku/loppu)"):
             s1_start_text = st.text_input(
                 tr("AS-1 start (Ameen)", "AS-1 alku (Ameen)"),
                 placeholder="0,000m3",
-                help=tr("Use comma as decimal. Max 3 decimals.", "Kayta pilkkua. Enintaan 3 desimaalia."),
+                help=tr("Use comma as decimal. Max 3 decimals.", "Käytä pilkkua. Enintään 3 desimaalia."),
                 key="s1_start_text",
             )
             if s1_start_text and not validate_decimal_places(s1_start_text, 3):
-                st.error(tr("AS-1 start: max 3 decimals.", "AS-1 alku: enintaan 3 desimaalia."))
+                st.error(tr("AS-1 start: max 3 decimals.", "AS-1 alku: enintään 3 desimaalia."))
         else:
             s1_use_text = st.text_input(
                 tr("AS-1 usage (Ameen)", "AS-1 kulutus (Ameen)"),
                 placeholder="0,000m3",
-                help=tr("Use comma as decimal. Max 3 decimals.", "Kayta pilkkua. Enintaan 3 desimaalia."),
+                help=tr("Use comma as decimal. Max 3 decimals.", "Käytä pilkkua. Enintään 3 desimaalia."),
                 key="s1_use_text",
             )
             if s1_use_text and not validate_decimal_places(s1_use_text, 3):
-                st.error(tr("AS-1 usage: max 3 decimals.", "AS-1 kulutus: enintaan 3 desimaalia."))
-    with row1_cols[3]:
+                st.error(tr("AS-1 usage: max 3 decimals.", "AS-1 kulutus: enintään 3 desimaalia."))
+    with row1_cols[4]:
         if usage_mode == tr("Readings (start/end)", "Lukemat (alku/loppu)"):
             s2_start_text = st.text_input(
                 tr("AS-2 start (Jussi)", "AS-2 alku (Jussi)"),
                 placeholder="0,000m3",
-                help=tr("Use comma as decimal. Max 3 decimals.", "Kayta pilkkua. Enintaan 3 desimaalia."),
+                help=tr("Use comma as decimal. Max 3 decimals.", "Käytä pilkkua. Enintään 3 desimaalia."),
                 key="s2_start_text",
             )
             if s2_start_text and not validate_decimal_places(s2_start_text, 3):
-                st.error(tr("AS-2 start: max 3 decimals.", "AS-2 alku: enintaan 3 desimaalia."))
+                st.error(tr("AS-2 start: max 3 decimals.", "AS-2 alku: enintään 3 desimaalia."))
         else:
             s2_use_text = st.text_input(
                 tr("AS-2 usage (Jussi)", "AS-2 kulutus (Jussi)"),
                 placeholder="0,000m3",
-                help=tr("Use comma as decimal. Max 3 decimals.", "Kayta pilkkua. Enintaan 3 desimaalia."),
+                help=tr("Use comma as decimal. Max 3 decimals.", "Käytä pilkkua. Enintään 3 desimaalia."),
                 key="s2_use_text",
             )
             if s2_use_text and not validate_decimal_places(s2_use_text, 3):
-                st.error(tr("AS-2 usage: max 3 decimals.", "AS-2 kulutus: enintaan 3 desimaalia."))
+                st.error(tr("AS-2 usage: max 3 decimals.", "AS-2 kulutus: enintään 3 desimaalia."))
 
-    row2_cols = st.columns([0.9, 0.6, 1.2, 1.2])
-    with row2_cols[0]:
-        reading_end_date = st.date_input(
-            tr("Reading end", "Lukema loppu"),
-            format="DD/MM/YYYY",
-            key="reading_end_date",
-        )
-    with row2_cols[1]:
-        reading_end_time = st.time_input(
-            tr("Time", "Aika"),
-            value=time(0, 0),
-            key="reading_end_time",
-        )
-    with row2_cols[2]:
-        if usage_mode == tr("Readings (start/end)", "Lukemat (alku/loppu)"):
+    # Row 2: End readings (only in Readings mode)
+    if usage_mode == tr("Readings (start/end)", "Lukemat (alku/loppu)"):
+        row2_cols = st.columns([0.7, 0.5, 1.0, 1.0, 1.0])
+        with row2_cols[0]:
+            reading_end_date = st.date_input(
+                tr("Reading end", "Lukema loppu"),
+                format="DD/MM/YYYY",
+                key="reading_end_date",
+            )
+        with row2_cols[1]:
+            reading_end_time = st.time_input(
+                tr("Time", "Aika"),
+                value=time(0, 0),
+                key="reading_end_time",
+            )
+        with row2_cols[2]:
+            main_end_text = st.text_input(
+                tr("Main end", "Päämittari loppu"),
+                placeholder="0",
+                help=tr("Optional. Whole number.", "Valinnainen. Kokonaisluku."),
+                key="main_end_text",
+            )
+        with row2_cols[3]:
             s1_end_text = st.text_input(
                 tr("AS-1 end (Ameen)", "AS-1 loppu (Ameen)"),
                 placeholder="0,000m3",
-                help=tr("Use comma as decimal. Max 3 decimals.", "Kayta pilkkua. Enintaan 3 desimaalia."),
+                help=tr("Use comma as decimal. Max 3 decimals.", "Käytä pilkkua. Enintään 3 desimaalia."),
                 key="s1_end_text",
             )
             if s1_end_text and not validate_decimal_places(s1_end_text, 3):
-                st.error(tr("AS-1 end: max 3 decimals.", "AS-1 loppu: enintaan 3 desimaalia."))
-            s1_start = parse_number(s1_start_text)
-            s1_end = parse_number(s1_end_text)
-            s1_use = (
-                s1_end - s1_start
-                if s1_start is not None and s1_end is not None
-                else None
-            )
-        else:
-            s1_use = parse_number(s1_use_text)
-            s1_start = None
-            s1_end = None
-    with row2_cols[3]:
-        if usage_mode == tr("Readings (start/end)", "Lukemat (alku/loppu)"):
+                st.error(tr("AS-1 end: max 3 decimals.", "AS-1 loppu: enintään 3 desimaalia."))
+        with row2_cols[4]:
             s2_end_text = st.text_input(
                 tr("AS-2 end (Jussi)", "AS-2 loppu (Jussi)"),
                 placeholder="0,000m3",
-                help=tr("Use comma as decimal. Max 3 decimals.", "Kayta pilkkua. Enintaan 3 desimaalia."),
+                help=tr("Use comma as decimal. Max 3 decimals.", "Käytä pilkkua. Enintään 3 desimaalia."),
                 key="s2_end_text",
             )
             if s2_end_text and not validate_decimal_places(s2_end_text, 3):
-                st.error(tr("AS-2 end: max 3 decimals.", "AS-2 loppu: enintaan 3 desimaalia."))
-            s2_start = parse_number(s2_start_text)
-            s2_end = parse_number(s2_end_text)
-            s2_use = (
-                s2_end - s2_start
-                if s2_start is not None and s2_end is not None
-                else None
-            )
-        else:
-            s2_use = parse_number(s2_use_text)
-            s2_start = None
-            s2_end = None
+                st.error(tr("AS-2 end: max 3 decimals.", "AS-2 loppu: enintään 3 desimaalia."))
+        
+        # Parse readings mode values
+        s1_start = parse_number(s1_start_text)
+        s1_end = parse_number(s1_end_text)
+        s1_use = s1_end - s1_start if s1_start is not None and s1_end is not None else None
+        s2_start = parse_number(s2_start_text)
+        s2_end = parse_number(s2_end_text)
+        s2_use = s2_end - s2_start if s2_start is not None and s2_end is not None else None
+        main_start = parse_number(main_start_text)
+        main_end = parse_number(main_end_text)
+    else:
+        # Usage only mode - set defaults for end readings
+        reading_end_date = reading_start_date
+        reading_end_time = reading_start_time
+        s1_use = parse_number(s1_use_text)
+        s2_use = parse_number(s2_use_text)
+        s1_start = None
+        s1_end = None
+        s2_start = None
+        s2_end = None
+        main_start = None
+        main_end = None
+        main_use_val = parse_number(main_use_text)
+    
+    # Determine if main meter is provided
+    use_main = False
+    if usage_mode == tr("Readings (start/end)", "Lukemat (alku/loppu)"):
+        if main_start is not None and main_end is not None and main_end > main_start:
+            use_main = True
+    else:
+        if main_use_text and parse_number(main_use_text) is not None:
+            use_main = True
+            main_start = 0
+            main_end = parse_number(main_use_text)
 
     st.subheader(tr("Mismatch allocation (manual override)", "Poikkeaman jako (manuaalinen yliajo)"))
-    policy_ignore = tr("Ignore mismatch (display-only)", "Ohita poikkeama (vain naytto)")
+    policy_ignore = tr("Ignore mismatch (display-only)", "Ohita poikkeama (vain näyttö)")
     policy_half = tr("Split mismatch 50/50", "Jaa poikkeama 50/50")
     policy_prop = tr("Split mismatch proportional", "Jaa poikkeama suhteessa")
     mismatch_policy_label = st.selectbox(
-        tr("Policy", "Kaytanto"),
+        tr("Policy", "Käytäntö"),
         [
             policy_ignore,
             policy_half,
@@ -485,8 +576,8 @@ if page_id == "split":
                 "Optional: decide how to split the difference between main and sub-meters.\n"
                 "Default is display-only. Overrides apply only if main meter "
                 "readings are provided.",
-                "Oletus on vain naytto. Yliajo toimii vain, jos paamittarin "
-                "Valinnainen: miten jaetaan paamittarin ja alamittarien erotus.\n"
+                "Oletus on vain näyttö. Yliajo toimii vain, jos päämittarin "
+                "Valinnainen: miten jaetaan päämittarin ja alamittarien erotus.\n"
                 "lukemat on annettu.",
             )
         ),
@@ -502,38 +593,38 @@ if page_id == "split":
         if s2_use is None:
             errors.append(tr("AS-2 usage is required.", "AS-2 kulutus vaaditaan."))
         if basic_fees is None:
-            errors.append(tr("Basic fees total is required.", "Perusmaksut yhteensa vaaditaan."))
+            errors.append(tr("Basic fees total is required.", "Perusmaksut yhteensä vaaditaan."))
         if usage_fees is None:
-            errors.append(tr("Consumption total is required.", "Kayttomaksut yhteensa vaaditaan."))
+            errors.append(tr("Consumption total is required.", "Käyttömaksut yhteensä vaaditaan."))
         if not validate_decimal_places(basic_fees_text, 2):
-            errors.append(tr("Basic fees must have at most 2 decimals.", "Perusmaksu enintaan 2 desimaalia."))
+            errors.append(tr("Basic fees must have at most 2 decimals.", "Perusmaksu enintään 2 desimaalia."))
         if not validate_decimal_places(usage_fees_text, 2):
-            errors.append(tr("Consumption total must have at most 2 decimals.", "Kayttomaksu enintaan 2 desimaalia."))
+            errors.append(tr("Consumption total must have at most 2 decimals.", "Käyttömaksu enintään 2 desimaalia."))
         if s1_start is not None and not validate_decimal_places(s1_start_text, 3):
-            errors.append(tr("AS-1 start must have at most 3 decimals.", "AS-1 alku enintaan 3 desimaalia."))
+            errors.append(tr("AS-1 start must have at most 3 decimals.", "AS-1 alku enintään 3 desimaalia."))
         if s1_end is not None and not validate_decimal_places(s1_end_text, 3):
-            errors.append(tr("AS-1 end must have at most 3 decimals.", "AS-1 loppu enintaan 3 desimaalia."))
+            errors.append(tr("AS-1 end must have at most 3 decimals.", "AS-1 loppu enintään 3 desimaalia."))
         if s2_start is not None and not validate_decimal_places(s2_start_text, 3):
-            errors.append(tr("AS-2 start must have at most 3 decimals.", "AS-2 alku enintaan 3 desimaalia."))
+            errors.append(tr("AS-2 start must have at most 3 decimals.", "AS-2 alku enintään 3 desimaalia."))
         if s2_end is not None and not validate_decimal_places(s2_end_text, 3):
-            errors.append(tr("AS-2 end must have at most 3 decimals.", "AS-2 loppu enintaan 3 desimaalia."))
+            errors.append(tr("AS-2 end must have at most 3 decimals.", "AS-2 loppu enintään 3 desimaalia."))
         if usage_mode == tr("Usage only", "Vain kulutus"):
             if s1_use_text is not None and not validate_decimal_places(s1_use_text, 3):
-                errors.append(tr("AS-1 usage must have at most 3 decimals.", "AS-1 kulutus enintaan 3 desimaalia."))
+                errors.append(tr("AS-1 usage must have at most 3 decimals.", "AS-1 kulutus enintään 3 desimaalia."))
             if s2_use_text is not None and not validate_decimal_places(s2_use_text, 3):
-                errors.append(tr("AS-2 usage must have at most 3 decimals.", "AS-2 kulutus enintaan 3 desimaalia."))
-        if s1_use < 0 or s2_use < 0:
+                errors.append(tr("AS-2 usage must have at most 3 decimals.", "AS-2 kulutus enintään 3 desimaalia."))
+        if s1_use is not None and s2_use is not None and (s1_use < 0 or s2_use < 0):
             errors.append(tr("Sub-meter usage cannot be negative.", "Alamittarin kulutus ei voi olla negatiivinen."))
         if use_main and main_start is not None and main_end is not None:
             if main_end <= main_start:
-                errors.append(tr("Main meter usage must be greater than 0.", "Paamittarin kulutuksen on oltava suurempi kuin 0."))
-        if s1_use + s2_use <= 0:
+                errors.append(tr("Main meter usage must be greater than 0.", "Päämittarin kulutuksen on oltava suurempi kuin 0."))
+        if s1_use is not None and s2_use is not None and s1_use + s2_use <= 0:
             errors.append(tr("Total sub-meter usage must be greater than 0.", "Alamittarien kokonaiskulutuksen on oltava suurempi kuin 0."))
         if (
             mismatch_policy_label != policy_ignore
             and not use_main
         ):
-            errors.append(tr("Mismatch override requires main meter readings.", "Poikkeaman yliajo vaatii paamittarin lukemat."))
+            errors.append(tr("Mismatch override requires main meter readings.", "Poikkeaman yliajo vaatii päämittarin lukemat."))
 
         if errors:
             for err in errors:
@@ -561,7 +652,7 @@ if page_id == "split":
                     main_use=main_use,
                 )
             except ValueError as exc:
-                st.error(str(exc))
+                st.error(tr_error(str(exc)))
                 st.stop()
 
             adj_s1_use = split["adj_s1_use"]
@@ -577,16 +668,16 @@ if page_id == "split":
             st.table(
                 [
                     {
-                        tr("Person", "Henkilo"): "AS-1 (Ameen)",
+                        tr("Person", "Henkilö"): "AS-1 (Ameen)",
                         tr("Usage", "Kulutus"): format_m3(adj_s1_use),
-                        tr("Usage fees", "Kayttomaksu"): format_eur(usage_share_1),
+                        tr("Usage fees", "Käyttömaksu"): format_eur(usage_share_1),
                         tr("Basic fees", "Perusmaksu"): format_eur(basic_share),
                         tr("Total", "Yhteensa"): format_eur(basic_share + usage_share_1),
                     },
                     {
-                        tr("Person", "Henkilo"): "AS-2 (Jussi)",
+                        tr("Person", "Henkilö"): "AS-2 (Jussi)",
                         tr("Usage", "Kulutus"): format_m3(adj_s2_use),
-                        tr("Usage fees", "Kayttomaksu"): format_eur(usage_share_2),
+                        tr("Usage fees", "Käyttömaksu"): format_eur(usage_share_2),
                         tr("Basic fees", "Perusmaksu"): format_eur(basic_share),
                         tr("Total", "Yhteensa"): format_eur(basic_share + usage_share_2),
                     },
@@ -598,8 +689,8 @@ if page_id == "split":
             total_jussi = basic_share + usage_share_2
             st.write(
                 {
-                    tr("Total for Ameen", "Ameen yhteensa"): format_eur(total_ameen),
-                    tr("Total for Jussi", "Jussi yhteensa"): format_eur(total_jussi),
+                    tr("Total for Ameen", "Ameen yhteensä"): format_eur(total_ameen),
+                    tr("Total for Jussi", "Jussi yhteensä"): format_eur(total_jussi),
                     tr("Ameen will pay Jussi", "Ameen maksaa Jussille"): format_eur(total_ameen),
                 }
             )
@@ -612,8 +703,8 @@ if page_id == "split":
                 )
                 if not is_fi
                 else (
-                    "Talla jaksolla: Jussi yhteensa "
-                    f"{format_eur(total_jussi)}, Ameen yhteensa "
+                    "Tällä jaksolla: Jussi yhteensä "
+                    f"{format_eur(total_jussi)}, Ameen yhteensä "
                     f"{format_eur(total_ameen)} → Ameen maksaa Jussille "
                     f"{format_eur(total_ameen)}."
                 )
@@ -623,7 +714,7 @@ if page_id == "split":
                 value=whatsapp_line,
             )
 
-            st.markdown(f"### {tr('Mismatch (always shown)', 'Poikkeama (aina naytetaan)')}")
+            st.markdown(f"### {tr('Mismatch (always shown)', 'Poikkeama (aina näytetään)')}")
             if use_main and main_use is not None:
                 status_code = mismatch_status(mismatch_m3, mismatch_pct)
                 status_label = {
@@ -638,8 +729,8 @@ if page_id == "split":
                 }[status_code]
                 st.write(
                     {
-                        tr("Main usage", "Paamittarin kulutus"): format_m3(main_use),
-                        tr("Sub-meter total", "Alamittarit yhteensa"): format_m3(sub_sum),
+                        tr("Main usage", "Päämittarin kulutus"): format_m3(main_use),
+                        tr("Sub-meter total", "Alamittarit yhteensä"): format_m3(sub_sum),
                         tr("Mismatch (m³)", "Poikkeama (m³)"): format_m3(mismatch_m3),
                         tr("Mismatch (%)", "Poikkeama (%)"): (
                             f"{format_number(mismatch_pct * 100, 2)}%"
@@ -657,7 +748,7 @@ if page_id == "split":
                     st.error(message)
                 st.write({tr("Mismatch policy", "Poikkeaman kaytanto"): mismatch_policy_label})
             else:
-                st.info(tr("Mismatch not available (main meter not provided).", "Poikkeamaa ei voi laskea (paamittari puuttuu)."))
+                st.info(tr("Mismatch not available (main meter not provided).", "Poikkeamaa ei voi laskea (päämittari puuttuu)."))
 
             reading_start = f"{reading_start_date.strftime('%d/%m/%Y')} {reading_start_time.strftime('%H:%M')}"
             reading_end = f"{reading_end_date.strftime('%d/%m/%Y')} {reading_end_time.strftime('%H:%M')}"
@@ -666,17 +757,18 @@ if page_id == "split":
                 record = {
                     "Period start": period_start.strftime("%d/%m/%Y"),
                     "Period end": period_end.strftime("%d/%m/%Y"),
+                    "Invoice number": invoice_number or "",
+                    "Estimated water": estimated_water,
+                    "Due date": due_date.strftime("%d/%m/%Y"),
                     "Reading start": reading_start,
                     "Reading end": reading_end,
+                    "Main usage": main_use,
                     "AS-1 usage": s1_use,
                     "AS-2 usage": s2_use,
-                    "AS-1 adjusted": adj_s1_use,
-                    "AS-2 adjusted": adj_s2_use,
                     "Basic fees": basic_fees,
                     "Usage fees": usage_fees,
                     "AS-1 total": basic_share + usage_share_1,
                     "AS-2 total": basic_share + usage_share_2,
-                    "Mismatch policy": mismatch_policy,
                     "Mismatch (m3)": mismatch_m3,
                     "Mismatch (%)": mismatch_pct,
                     "Saved at": datetime.now().strftime("%d/%m/%Y %H:%M"),
@@ -690,6 +782,9 @@ if page_id == "split":
                         {
                             "period_start": str(period_start),
                             "period_end": str(period_end),
+                            "invoice_number": invoice_number or "",
+                            "estimated_water": estimated_water,
+                            "due_date": str(due_date),
                             "reading_start": reading_start,
                             "reading_end": reading_end,
                             "basic_fees": basic_fees,
@@ -730,7 +825,7 @@ elif page_id == "trueup":
     st.caption(
         tr(
             "Use a correction amount and split by sub-meter usage ratio.",
-            "Syota oikaisu ja jaa kulutussuhteella.",
+            "Syötä oikaisu ja jaa kulutussuhteella.",
         )
     )
     st.info(
@@ -742,9 +837,9 @@ elif page_id == "trueup":
             "The amount is split proportionally by sub-meter usage. "
             "If the amount is positive, Ameen reimburses Jussi, since Jussi pays HSY.",
             "Oikaisu on HSY:n korjaus aiemmin arvioituihin laskuihin. "
-            "Kayta tata sivua vain, kun HSY lahettaa oikaisun. "
-            "Syota positiivinen summa lisamaksulle tai negatiivinen hyvitykselle. "
-            "Valitse kulutus tallennetuista jaksoista tai syota se manuaalisesti. "
+            "Käytä tätä sivua vain, kun HSY lähettää oikaisun. "
+            "Syötä positiivinen summa lisämaksulle tai negatiivinen hyvitykselle. "
+            "Valitse kulutus tallennetuista jaksoista tai syötä se manuaalisesti. "
             "Summa jaetaan kulutuksen mukaan. Jos summa on positiivinen, "
             "Ameen maksaa Jussille, koska Jussi maksaa HSY:lle.",
         )
@@ -758,12 +853,12 @@ elif page_id == "trueup":
     col_trueup = st.columns(2)
     with col_trueup[0]:
         trueup_start = st.date_input(
-            tr("True-up start date", "Oikaisun alkupaiva"),
+            tr("True-up start date", "Oikaisun alkupäivä"),
             format="DD/MM/YYYY",
         )
     with col_trueup[1]:
         trueup_end = st.date_input(
-            tr("True-up end date", "Oikaisun loppupaiva"),
+            tr("True-up end date", "Oikaisun loppupäivä"),
             format="DD/MM/YYYY",
         )
     trueup_amount_text = st.text_input(
@@ -773,15 +868,15 @@ elif page_id == "trueup":
     trueup_amount = parse_number(trueup_amount_text)
 
     usage_source = st.radio(
-        tr("Usage source", "Kulutuksen lahde"),
-        [tr("Use stored periods", "Kayta tallennettuja jaksoja"), tr("Manual usage", "Manuaalinen kulutus")],
+        tr("Usage source", "Kulutuksen lähde"),
+        [tr("Use stored periods", "Käytä tallennettuja jaksoja"), tr("Manual usage", "Manuaalinen kulutus")],
         horizontal=True,
     )
     s1_use_text = None
     s2_use_text = None
-    if usage_source == tr("Use stored periods", "Kayta tallennettuja jaksoja"):
+    if usage_source == tr("Use stored periods", "Käytä tallennettuja jaksoja"):
         if not period_records:
-            st.info(tr("No history entries found.", "Historiaa ei loydy."))
+            st.info(tr("No history entries found.", "Historiaa ei löydy."))
             selected = []
         else:
             options = []
@@ -839,12 +934,12 @@ elif page_id == "trueup":
         if s2_use is None:
             errors.append(tr("AS-2 usage is required.", "AS-2 kulutus vaaditaan."))
         if trueup_amount_text and not validate_decimal_places(trueup_amount_text, 2):
-            errors.append(tr("True-up amount must have at most 2 decimals.", "Oikaisun summa enintaan 2 desimaalia."))
+            errors.append(tr("True-up amount must have at most 2 decimals.", "Oikaisun summa enintään 2 desimaalia."))
         if usage_source == tr("Manual usage", "Manuaalinen kulutus"):
             if s1_use_text is not None and not validate_decimal_places(s1_use_text, 3):
-                errors.append(tr("AS-1 usage must have at most 3 decimals.", "AS-1 kulutus enintaan 3 desimaalia."))
+                errors.append(tr("AS-1 usage must have at most 3 decimals.", "AS-1 kulutus enintään 3 desimaalia."))
             if s2_use_text is not None and not validate_decimal_places(s2_use_text, 3):
-                errors.append(tr("AS-2 usage must have at most 3 decimals.", "AS-2 kulutus enintaan 3 desimaalia."))
+                errors.append(tr("AS-2 usage must have at most 3 decimals.", "AS-2 kulutus enintään 3 desimaalia."))
         if errors:
             for err in errors:
                 st.error(err)
@@ -852,7 +947,7 @@ elif page_id == "trueup":
             try:
                 trueup = compute_trueup(s1_use, s2_use, trueup_amount)
             except ValueError as exc:
-                st.error(tr(str(exc), str(exc)))
+                st.error(tr_error(str(exc)))
             else:
                 share_1 = trueup["share_1"]
                 share_2 = trueup["share_2"]
@@ -862,12 +957,12 @@ elif page_id == "trueup":
             st.table(
                 [
                     {
-                        tr("Person", "Henkilo"): "AS-1 (Ameen)",
+                        tr("Person", "Henkilö"): "AS-1 (Ameen)",
                         tr("Usage", "Kulutus"): format_m3(s1_use),
                         tr("Share", "Osuus"): format_eur(share_1),
                     },
                     {
-                        tr("Person", "Henkilo"): "AS-2 (Jussi)",
+                        tr("Person", "Henkilö"): "AS-2 (Jussi)",
                         tr("Usage", "Kulutus"): format_m3(s2_use),
                         tr("Share", "Osuus"): format_eur(share_2),
                     },
@@ -917,13 +1012,19 @@ elif page_id == "trueup":
 elif page_id == "history":
     st.header(tr("History", "Historia"))
     st.caption(tr("Saved billing periods and computed shares.", "Tallennetut jaksot ja lasketut osuudet."))
+    
+    # Cache refresh button
+    if st.button(tr("🔄 Refresh data", "🔄 Päivitä tiedot"), help=tr("Clear cache and reload from Google Sheets", "Tyhjennä välimuisti ja lataa uudelleen")):
+        clear_records_cache()
+        st.rerun()
+    
     period_records = get_records("periods")
     if not period_records:
         period_records = local_periods_records()
     trueup_records = get_records("trueups")
 
     if not period_records and not trueup_records:
-        st.info(tr("No history entries found.", "Historiaa ei loydy."))
+        st.info(tr("No history entries found.", "Historiaa ei löydy."))
     else:
         periods_tab, trueups_tab = st.tabs(
             [tr("Periods", "Jaksot"), tr("True-ups", "Oikaisut")]
@@ -931,37 +1032,91 @@ elif page_id == "history":
 
         with periods_tab:
             rows = []
+            # Track totals
+            total_s1_usage = 0.0
+            total_s2_usage = 0.0
+            total_basic_fees = 0.0
+            total_usage_fees = 0.0
+            total_s1_total = 0.0
+            total_s2_total = 0.0
+            
             for record in period_records:
                 data = normalize_period_record(record)
+                # Accumulate totals
+                total_s1_usage += data["s1_use"] or 0
+                total_s2_usage += data["s2_use"] or 0
+                total_basic_fees += data["basic_fees"] or 0
+                total_usage_fees += data["usage_fees"] or 0
+                total_s1_total += data["total_1"] or 0
+                total_s2_total += data["total_2"] or 0
+                
                 rows.append(
                     {
                         tr("Period start", "Jakson alku"): format_date(data["period_start"]),
                         tr("Period end", "Jakson loppu"): format_date(data["period_end"]),
+                        tr("Invoice", "Lasku"): data.get("invoice_number") or "-",
+                        tr("Est. water", "Arvio vesi"): format_m3(data.get("estimated_water")) if data.get("estimated_water") else "-",
+                        tr("Due date", "Eräpäivä"): format_date(data.get("due_date")) if data.get("due_date") else "-",
                         tr("Reading start", "Lukema alku"): data.get("reading_start"),
                         tr("Reading end", "Lukema loppu"): data.get("reading_end"),
+                        tr("Main usage", "Päämittari"): format_m3(data.get("main_use")) if data.get("main_use") else "-",
                         tr("AS-1 usage", "AS-1 kulutus"): format_m3(data["s1_use"]),
                         tr("AS-2 usage", "AS-2 kulutus"): format_m3(data["s2_use"]),
-                        tr("AS-1 adjusted", "AS-1 sovitettu"): format_m3(data["adj_s1_use"]),
-                        tr("AS-2 adjusted", "AS-2 sovitettu"): format_m3(data["adj_s2_use"]),
                         tr("Basic fees", "Perusmaksu"): format_eur(data["basic_fees"]),
-                        tr("Usage fees", "Kayttomaksu"): format_eur(data["usage_fees"]),
-                        tr("AS-1 total", "AS-1 yhteensa"): format_eur(data["total_1"]),
-                        tr("AS-2 total", "AS-2 yhteensa"): format_eur(data["total_2"]),
-                        tr("Mismatch policy", "Poikkeaman kaytanto"): data["mismatch_policy"],
-                        tr("Mismatch (m³)", "Poikkeama (m³)"): (
-                            format_m3(data["mismatch_m3"])
-                            if data["mismatch_m3"] is not None
-                            else None
-                        ),
-                        tr("Mismatch (%)", "Poikkeama (%)"): (
-                            f"{format_number(data['mismatch_pct'] * 100, 2)}%"
-                            if data["mismatch_pct"] is not None
-                            else None
-                        ),
+                        tr("Usage fees", "Käyttömaksu"): format_eur(data["usage_fees"]),
+                        tr("AS-1 total", "AS-1 yhteensä"): format_eur(data["total_1"]),
+                        tr("AS-2 total", "AS-2 yhteensä"): format_eur(data["total_2"]),
                         tr("Saved at", "Tallennettu"): format_date(data["saved_at"]),
                     }
                 )
+            # Add totals row to the table
+            if rows:
+                totals_row = {
+                    tr("Period start", "Jakson alku"): tr("**TOTAL**", "**YHTEENSÄ**"),
+                    tr("Period end", "Jakson loppu"): "",
+                    tr("Invoice", "Lasku"): "",
+                    tr("Est. water", "Arvio vesi"): "",
+                    tr("Due date", "Eräpäivä"): "",
+                    tr("Reading start", "Lukema alku"): "",
+                    tr("Reading end", "Lukema loppu"): "",
+                    tr("Main usage", "Päämittari"): "",
+                    tr("AS-1 usage", "AS-1 kulutus"): format_m3(total_s1_usage),
+                    tr("AS-2 usage", "AS-2 kulutus"): format_m3(total_s2_usage),
+                    tr("Basic fees", "Perusmaksu"): format_eur(total_basic_fees),
+                    tr("Usage fees", "Käyttömaksu"): format_eur(total_usage_fees),
+                    tr("AS-1 total", "AS-1 yhteensä"): format_eur(total_s1_total),
+                    tr("AS-2 total", "AS-2 yhteensä"): format_eur(total_s2_total),
+                    tr("Saved at", "Tallennettu"): "",
+                }
+                rows.append(totals_row)
+            
             st.dataframe(rows, width="stretch")
+            
+            # Display cumulative totals breakdown
+            if rows and len(rows) > 1:
+                st.subheader(tr("Cumulative Totals", "Kumulatiiviset summat"))
+                tot_col1, tot_col2, tot_col3 = st.columns(3)
+                with tot_col1:
+                    st.markdown(f"**AS-1 (Ameen)**")
+                    st.markdown(f"- {tr('Total usage', 'Kokonaiskulutus')}: **{format_m3(total_s1_usage)}**")
+                    st.markdown(f"- {tr('Basic fees (50%)', 'Perusmaksut (50%)')}: **{format_eur(total_basic_fees / 2)}**")
+                    st.markdown(f"- {tr('Usage fees', 'Käyttömaksut')}: **{format_eur(total_s1_total - total_basic_fees / 2)}**")
+                    st.markdown(f"- {tr('**Grand total**', '**Kokonaissumma**')}: **{format_eur(total_s1_total)}**")
+                with tot_col2:
+                    st.markdown(f"**AS-2 (Jussi)**")
+                    st.markdown(f"- {tr('Total usage', 'Kokonaiskulutus')}: **{format_m3(total_s2_usage)}**")
+                    st.markdown(f"- {tr('Basic fees (50%)', 'Perusmaksut (50%)')}: **{format_eur(total_basic_fees / 2)}**")
+                    st.markdown(f"- {tr('Usage fees', 'Käyttömaksut')}: **{format_eur(total_s2_total - total_basic_fees / 2)}**")
+                    st.markdown(f"- {tr('**Grand total**', '**Kokonaissumma**')}: **{format_eur(total_s2_total)}**")
+                with tot_col3:
+                    st.markdown(f"**{tr('Combined', 'Yhteensa')}**")
+                    st.markdown(f"- {tr('Total usage', 'Kokonaiskulutus')}: **{format_m3(total_s1_usage + total_s2_usage)}**")
+                    st.markdown(f"- {tr('Basic fees', 'Perusmaksut')}: **{format_eur(total_basic_fees)}**")
+                    st.markdown(f"- {tr('Usage fees', 'Käyttömaksut')}: **{format_eur(total_usage_fees)}**")
+                    st.markdown(f"- {tr('**Grand total**', '**Kokonaissumma**')}: **{format_eur(total_s1_total + total_s2_total)}**")
+                
+                st.markdown("---")
+                st.markdown(f"**{tr('Number of periods', 'Jaksojen määrä')}**: {len(rows) - 1}")
             if rows:
                 csv_buffer = io.StringIO()
                 writer = csv.DictWriter(csv_buffer, fieldnames=rows[0].keys())
@@ -978,29 +1133,48 @@ elif page_id == "history":
                     file_name=f"water_bill_history_{safe_start}_{safe_end}.csv",
                     mime="text/csv",
                 )
-                pdf_lines = [tr("History Export", "Historia - vienti"), ""]
-                for row in rows:
-                    pdf_lines.append(
-                        f"{tr('Period', 'Jakso')}: {row.get(tr('Period start', 'Jakson alku'))} "
-                        f"- {row.get(tr('Period end', 'Jakson loppu'))}"
-                    )
-                    pdf_lines.append(
-                        f"{tr('AS-1 usage', 'AS-1 kulutus')}: {row.get(tr('AS-1 usage', 'AS-1 kulutus'))}, "
-                        f"{tr('AS-2 usage', 'AS-2 kulutus')}: {row.get(tr('AS-2 usage', 'AS-2 kulutus'))}"
-                    )
-                    pdf_lines.append(
-                        f"{tr('Basic fees', 'Perusmaksu')}: {row.get(tr('Basic fees', 'Perusmaksu'))}, "
-                        f"{tr('Usage fees', 'Kayttomaksu')}: {row.get(tr('Usage fees', 'Kayttomaksu'))}"
-                    )
-                    pdf_lines.append(
-                        f"{tr('AS-1 total', 'AS-1 yhteensa')}: {row.get(tr('AS-1 total', 'AS-1 yhteensa'))}, "
-                        f"{tr('AS-2 total', 'AS-2 yhteensa')}: {row.get(tr('AS-2 total', 'AS-2 yhteensa'))}"
-                    )
-                    pdf_lines.append(
-                        f"{tr('Mismatch policy', 'Poikkeaman kaytanto')}: "
-                        f"{row.get(tr('Mismatch policy', 'Poikkeaman kaytanto'))}"
-                    )
+                pdf_lines = [tr("Water Bill History - Hirvensarvi 16 B", "Vesilaskuhistoria - Hirvensarvi 16 B"), ""]
+                
+                # Add each period (excluding the totals row for individual listing)
+                data_rows = rows[:-1] if len(rows) > 1 else rows
+                for i, row in enumerate(data_rows):
+                    pdf_lines.append(f"{tr('Period', 'Jakso')} {i+1}: {row.get(tr('Period start', 'Jakson alku'))} - {row.get(tr('Period end', 'Jakson loppu'))}")
+                    invoice_val = row.get(tr('Invoice', 'Lasku')) or "-"
+                    est_water_val = row.get(tr('Est. water', 'Arvio vesi')) or "-"
+                    due_date_val = row.get(tr('Due date', 'Eräpäivä')) or "-"
+                    pdf_lines.append(f"  {tr('Invoice', 'Lasku')}: {invoice_val}, {tr('Est. water', 'Arvio vesi')}: {est_water_val}, {tr('Due date', 'Eräpäivä')}: {due_date_val}")
+                    pdf_lines.append(f"  {tr('AS-1 usage', 'AS-1 kulutus')}: {row.get(tr('AS-1 usage', 'AS-1 kulutus'))}, {tr('AS-2 usage', 'AS-2 kulutus')}: {row.get(tr('AS-2 usage', 'AS-2 kulutus'))}")
+                    pdf_lines.append(f"  {tr('Basic fees', 'Perusmaksu')}: {row.get(tr('Basic fees', 'Perusmaksu'))}, {tr('Usage fees', 'Käyttömaksu')}: {row.get(tr('Usage fees', 'Käyttömaksu'))}")
+                    pdf_lines.append(f"  {tr('AS-1 total', 'AS-1 yhteensä')}: {row.get(tr('AS-1 total', 'AS-1 yhteensä'))}, {tr('AS-2 total', 'AS-2 yhteensä')}: {row.get(tr('AS-2 total', 'AS-2 yhteensä'))}")
                     pdf_lines.append("")
+                
+                # Add cumulative totals summary
+                pdf_lines.append("=" * 50)
+                pdf_lines.append(tr("CUMULATIVE TOTALS", "KUMULATIIVISET SUMMAT"))
+                pdf_lines.append("=" * 50)
+                pdf_lines.append("")
+                pdf_lines.append(f"AS-1 (Ameen):")
+                pdf_lines.append(f"  {tr('Total usage', 'Kokonaiskulutus')}: {format_m3(total_s1_usage)}")
+                pdf_lines.append(f"  {tr('Basic fees (50%)', 'Perusmaksut (50%)')}: {format_eur(total_basic_fees / 2)}")
+                pdf_lines.append(f"  {tr('Usage fees', 'Käyttömaksut')}: {format_eur(total_s1_total - total_basic_fees / 2)}")
+                pdf_lines.append(f"  {tr('Grand total', 'Kokonaissumma')}: {format_eur(total_s1_total)}")
+                pdf_lines.append("")
+                pdf_lines.append(f"AS-2 (Jussi):")
+                pdf_lines.append(f"  {tr('Total usage', 'Kokonaiskulutus')}: {format_m3(total_s2_usage)}")
+                pdf_lines.append(f"  {tr('Basic fees (50%)', 'Perusmaksut (50%)')}: {format_eur(total_basic_fees / 2)}")
+                pdf_lines.append(f"  {tr('Usage fees', 'Käyttömaksut')}: {format_eur(total_s2_total - total_basic_fees / 2)}")
+                pdf_lines.append(f"  {tr('Grand total', 'Kokonaissumma')}: {format_eur(total_s2_total)}")
+                pdf_lines.append("")
+                pdf_lines.append(f"{tr('Combined', 'Yhteensa')}:")
+                pdf_lines.append(f"  {tr('Total usage', 'Kokonaiskulutus')}: {format_m3(total_s1_usage + total_s2_usage)}")
+                pdf_lines.append(f"  {tr('Basic fees', 'Perusmaksut')}: {format_eur(total_basic_fees)}")
+                pdf_lines.append(f"  {tr('Usage fees', 'Käyttömaksut')}: {format_eur(total_usage_fees)}")
+                pdf_lines.append(f"  {tr('Grand total', 'Kokonaissumma')}: {format_eur(total_s1_total + total_s2_total)}")
+                pdf_lines.append("")
+                pdf_lines.append("-" * 50)
+                pdf_lines.append(f"{tr('Number of periods', 'Jaksojen määrä')}: {len(data_rows)}")
+                pdf_lines.append("")
+                
                 pdf_lines = wrap_lines(pdf_lines)
                 pdf_data = build_simple_pdf(pdf_lines)
                 st.download_button(
@@ -1070,4 +1244,4 @@ elif page_id == "history":
                     mime="application/pdf",
                 )
             else:
-                st.info(tr("No true-ups found.", "Oikaisuja ei loydy."))
+                st.info(tr("No true-ups found.", "Oikaisuja ei löydy."))

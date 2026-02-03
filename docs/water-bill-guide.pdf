@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 7 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 2996 >>
+<< /Length 3140 >>
 stream
 BT
 /F1 9 Tf
@@ -26,35 +26,57 @@ BT
 0 -12 Td
 () Tj
 0 -12 Td
-(2\) Note the totals:) Tj
+(2\) Note the invoice details:) Tj
+0 -12 Td
+(    - Invoice number \(laskun numero\)) Tj
+0 -12 Td
+(    - Estimated water amount on the bill \(arvioitu vesimaara\)) Tj
+0 -12 Td
+(    - Due date \(erapaiva\)) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(3\) Note the totals:) Tj
 0 -12 Td
 (    - Basic fees total \(perusmaksu\)) Tj
 0 -12 Td
 (    - Consumption total \(kayttomaksut\)) Tj
 0 -12 Td
+(    - The app shows the Total bill automatically when both are entered.) Tj
+0 -12 Td
 () Tj
 0 -12 Td
-(3\) Read sub-meters at the start and end of the same period:) Tj
+(4\) Use the sub-meter readings for the period:) Tj
 0 -12 Td
 (    - AS-1 \(Ameen\)) Tj
 0 -12 Td
 (    - AS-2 \(Jussi\)) Tj
 0 -12 Td
-(    - Go to the maintenance room and take a photo of both readings.) Tj
+(    - One reading serves as both END of one period and START of the next.) Tj
 0 -12 Td
-(    - Take the start reading on the first day of the period.) Tj
+(    - So you only need to visit the maintenance room 4 times per year.) Tj
 0 -12 Td
-(    - Take the end reading on the last day \(evening\) or the next morning.) Tj
+(    - Both Ameen and Jussi go together to take photos of both sub-meters.) Tj
 0 -12 Td
-(    - Note: Jussi will go to the maintenance room on these days to take the readings,) Tj
-0 -12 Td
-(    and Ameen will do the same.) Tj
+(    - See "When to take sub-meter readings" section below for exact dates.) Tj
 0 -12 Td
 () Tj
 0 -12 Td
-(4\) In the app: Split current bill) Tj
+(5\) Optional: Read the main meter \(whole numbers, no decimals\)) Tj
 0 -12 Td
-(    - Enter period, totals, and sub-meter readings \(or usage only\).) Tj
+(    - Used only for mismatch detection, not for cost calculation by default.) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(6\) In the app: Split current bill) Tj
+0 -12 Td
+(    - Enter billing period dates.) Tj
+0 -12 Td
+(    - Enter invoice number, estimated water, and due date.) Tj
+0 -12 Td
+(    - Enter basic fees and consumption totals \(Total bill shown automatically\).) Tj
+0 -12 Td
+(    - Enter sub-meter readings \(or usage only mode\).) Tj
 0 -12 Td
 (    - Optional: add main meter readings to see mismatch status.) Tj
 0 -12 Td
@@ -62,11 +84,11 @@ BT
 0 -12 Td
 () Tj
 0 -12 Td
-(5\) Use the Settlement line and WhatsApp copy/paste.) Tj
+(7\) Use the Settlement line and WhatsApp copy/paste.) Tj
 0 -12 Td
 () Tj
 0 -12 Td
-(6\) Keep "Save this period to history" checked.) Tj
+(8\) Keep "Save this period to history" checked.) Tj
 0 -12 Td
 () Tj
 0 -12 Td
@@ -108,11 +130,29 @@ BT
 0 -12 Td
 () Tj
 0 -12 Td
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 6 0 R /Resources << /Font << /F1 7 0 R >> >> >>
+endobj
+6 0 obj
+<< /Length 1941 >>
+stream
+BT
+/F1 9 Tf
+48 744 Td
 (History) Tj
 0 -12 Td
 (    - History page shows past periods and computed shares.) Tj
 0 -12 Td
 (    - Data is saved in a shared Google Sheet. Ameen will share the link with Jussi.) Tj
+0 -12 Td
+(    - Use the "Refresh data" button to reload latest data from the sheet.) Tj
+0 -12 Td
+(    - Download as CSV or PDF for your records.) Tj
+0 -12 Td
+(    - Cumulative totals show running totals for both parties.) Tj
 0 -12 Td
 () Tj
 0 -12 Td
@@ -130,27 +170,15 @@ BT
 0 -12 Td
 (When to take sub-meter readings \(2026\)) Tj
 0 -12 Td
-ET
-endstream
-endobj
-5 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 6 0 R /Resources << /Font << /F1 7 0 R >> >> >>
-endobj
-6 0 obj
-<< /Length 816 >>
-stream
-BT
-/F1 9 Tf
-48 744 Td
 (  Go to the maintenance room on these dates:) Tj
 0 -12 Td
-(    31/03/2026 ? End of Q1, Start of Q2) Tj
+(    31/03/2026 - End of Q1, Start of Q2) Tj
 0 -12 Td
-(    30/06/2026 ? End of Q2, Start of Q3) Tj
+(    30/06/2026 - End of Q2, Start of Q3) Tj
 0 -12 Td
-(    30/09/2026 ? End of Q3, Start of Q4) Tj
+(    30/09/2026 - End of Q3, Start of Q4) Tj
 0 -12 Td
-(    31/12/2026 ? End of Q4, Start of Q1 2027) Tj
+(    31/12/2026 - End of Q4, Start of Q1 2027) Tj
 0 -12 Td
 (  - One reading serves as both the END of one period and the START of the next.) Tj
 0 -12 Td
@@ -160,9 +188,27 @@ BT
 0 -12 Td
 (  - Overnight water usage is minimal, so either time works.) Tj
 0 -12 Td
-(  - Ameen also will go on these dates to the maintenance room to take the readings.) Tj
+(  - Both Ameen and Jussi go together to the maintenance room.) Tj
 0 -12 Td
-(  - Both should take readings at the same time for accurate billing.) Tj
+(  - Take photos of both sub-meters at the same time for accurate billing.) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(App Features Summary) Tj
+0 -12 Td
+(  - Bilingual support: English and Finnish) Tj
+0 -12 Td
+(  - Input validation with live feedback) Tj
+0 -12 Td
+(  - Settlement line shows who owes whom) Tj
+0 -12 Td
+(  - WhatsApp-ready text for easy sharing) Tj
+0 -12 Td
+(  - History stored in Google Sheets) Tj
+0 -12 Td
+(  - PDF and CSV export available) Tj
+0 -12 Td
+(  - Login required for security) Tj
 0 -12 Td
 ET
 endstream
@@ -177,11 +223,11 @@ xref
 0000000058 00000 n 
 0000000121 00000 n 
 0000000247 00000 n 
-0000003295 00000 n 
-0000003421 00000 n 
-0000004288 00000 n 
+0000003439 00000 n 
+0000003565 00000 n 
+0000005558 00000 n 
 trailer
 << /Size 8 /Root 1 0 R >>
 startxref
-4358
+5628
 %%EOF
